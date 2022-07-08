@@ -22,13 +22,25 @@ import shop.gaship.gashipauth.exceptions.NoResponseDataException;
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 2022/07/09        oct_sky_out       최초 생성
+ * 2022/07/09        김민수           최초 생성
  */
 @Slf4j
 public class WebClientUtil<T> {
     private static final String errorMessage = "응답결과가 존재하지 않습니다.";
     private static final Duration timeOut = Duration.of(3, ChronoUnit.SECONDS);
 
+    /**
+     * methodName : get
+     * author : 김민수
+     * description : REST API get 메서드를 요청해주는 유틸성 메서드입니다.
+     *
+     * @param baseUrl : 기본 url
+     * @param urn
+     * @param queryParams : 쿼리 파라미터들입니다.
+     * @param headers : http 헤더들입니다.
+     * @param responseEntity : 요청받는 객체 타입입니다.
+     * @return t : responseEntity와 같은 객체 타입입니다.
+     */
     public T get(String baseUrl, String urn,
                  @Nullable List<QueryParam> queryParams,
                  @Nullable Map<String, List<String>> headers,
@@ -37,6 +49,21 @@ public class WebClientUtil<T> {
             , urn, queryParams, headers, responseEntity);
     }
 
+    /**
+     * methodName : post
+     * author : 김민수
+     * description : REST API post 메서드를 요청해주는 유틸성 메서드입니다.
+     *
+     * description : REST API post 메서드를 요청해주는 유틸성 메서드입니다.
+     *
+     * @param baseUrl : 기본 url
+     * @param urn
+     * @param queryParams : 쿼리 파라미터들입니다.
+     * @param headers : http 헤더들입니다.
+     * @param bodyValue : 서버에게 필요한 body data를 제공하기 위해 사용합니다..
+     * @param responseEntity : 요청받는 객체 타입입니다.
+     * @return t : responseEntity와 같은 객체 타입입니다.
+     */
     public <U> T post(String baseUrl, String urn,
                       @Nullable List<QueryParam> queryParams,
                       @Nullable Map<String, List<String>> headers,
@@ -46,6 +73,19 @@ public class WebClientUtil<T> {
             , urn, queryParams, headers, bodyValue, responseEntity);
     }
 
+    /**
+     * methodName : put
+     * author : 김민수
+     * description : REST API put 메서드를 요청해주는 유틸성 메서드입니다.
+     *
+     * @param baseUrl : 기본 url
+     * @param urn
+     * @param queryParams : 쿼리 파라미터들입니다.
+     * @param headers : http 헤더들입니다.
+     * @param bodyValue : 서버에게 필요한 body data를 제공하기 위해 사용합니다..
+     * @param responseEntity : 요청받는 객체 타입입니다.
+     * @return t : responseEntity와 같은 객체 타입입니다.
+     */
     public <U> T put(String baseUrl, String urn,
                      @Nullable List<QueryParam> queryParams,
                      @Nullable Map<String, List<String>> headers,
@@ -56,6 +96,19 @@ public class WebClientUtil<T> {
     }
 
 
+    /**
+     * methodName : patch
+     * author : 김민수
+     * description : REST API patch 메서드를 요청해주는 유틸성 메서드입니다.
+     *
+     * @param baseUrl : 기본 url
+     * @param urn
+     * @param queryParams : 쿼리 파라미터들입니다.
+     * @param headers : http 헤더들입니다.
+     * @param bodyValue : 서버에게 필요한 body data를 제공하기 위해 사용합니다..
+     * @param responseEntity : 요청받는 객체 타입입니다.
+     * @return t : responseEntity와 같은 객체 타입입니다.
+     */
     public <U> T patch(String baseUrl, String urn,
                        @Nullable List<QueryParam> queryParams,
                        @Nullable Map<String, List<String>> headers,
@@ -65,6 +118,18 @@ public class WebClientUtil<T> {
             , urn, queryParams, headers, bodyValue, responseEntity);
     }
 
+    /**
+     * methodName : delete
+     * author : 김민수
+     * description : REST API delete 메서드를 요청해주는 유틸성 메서드입니다.
+     *
+     * @param baseUrl : 기본 url
+     * @param urn
+     * @param queryParams : 쿼리 파라미터들입니다.
+     * @param headers : http 헤더들입니다.
+     * @param responseEntity : 요청받는 객체 타입입니다.
+     * @return t : responseEntity와 같은 객체 타입입니다.
+     */
     public T delete(String baseUrl, String urn,
                     @Nullable List<QueryParam> queryParams,
                     @Nullable Map<String, List<String>> headers,
