@@ -8,17 +8,35 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import shop.gaship.gashipauth.util.WebClientUtil;
 
 @Configuration
-@PropertySource("classpath:jwt.properties")
+@PropertySource("classpath:application.properties")
 public class JwtConfig {
-    @Value("${jwt.keypair}")
+    @Value("${secure.keymanager.url}")
+    private String baseUrl;
+
+    @Value("${secure.keymanager.appkey}")
+    private String appKey;
+
+    @Value("${secure.keymanager.jwt-secure-key}")
     private String jwtKeypair;
 
+
     @Bean
-    public Key createKey(){
+    public Key tokenKey() {
+        String secureKey = new WebClientUtil<String>()
+            .get(
+                baseUrl,
+                "/keymanager/v1.0/appkey/" + appKey + "/secrets/" + jwtKeypair,
+                null,
+                null,
+                String.class
+            ).getBody();
+
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtKeypair);
+
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secureKey);
 
         return new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
     }

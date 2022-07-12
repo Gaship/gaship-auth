@@ -5,20 +5,18 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenUtil {
-    private static final int THIRTY_MINUTE_AT_SECONDS = 1800000;
-    private static final int ONE_MONTH_AT_SECONDS = 1800000;
+    private static final long THIRTY_MINUTE_AT_MILLI_SEC = 1_800_000L;
+    private static final long ONE_MONTH_AT_MILLI_SEC = 2_629_700_000L;
+    public static final long  REDIS_EXPIRE_MAX_SECOND = THIRTY_MINUTE_AT_MILLI_SEC;
+    public static final long CLIENT_EXPIRE_MAX_SECOND = ONE_MONTH_AT_MILLI_SEC;
 
     private final Key createKey;
-
-    public JwtTokenUtil(Key createKey) {
-        this.createKey = createKey;
-    }
 
     /**
      * methodName : generateAccessToken
@@ -28,8 +26,8 @@ public class JwtTokenUtil {
      * @param userDetails : 사용자 인증 정보
      * @return string
      */
-    public String createAccessToken(UserDetails userDetails) {
-        return getToken(userDetails, THIRTY_MINUTE_AT_SECONDS);
+    public String createAccessToken(SignInSuccessUserDetailsDto userDetails) {
+        return getToken(userDetails, THIRTY_MINUTE_AT_MILLI_SEC);
     }
 
     /**
@@ -40,11 +38,11 @@ public class JwtTokenUtil {
      * @param userDetails : 사용자 인증 정보
      * @return string
      */
-    public String createRefreshToken(UserDetails userDetails) {
-        return getToken(userDetails, ONE_MONTH_AT_SECONDS);
+    public String createRefreshToken(SignInSuccessUserDetailsDto userDetails) {
+        return getToken(userDetails, ONE_MONTH_AT_MILLI_SEC);
     }
 
-    private String getToken(UserDetails userDetails, int seconds) {
+    private String getToken(SignInSuccessUserDetailsDto userDetails, long seconds) {
         Map<String, Object> header = makeJwtHeader();
         Date accessTokenExpireDate = getExpireDate(seconds);
         Map<String, Object> payload = makeJwtPayload(userDetails, accessTokenExpireDate.getTime());
@@ -58,14 +56,11 @@ public class JwtTokenUtil {
     }
 
 
-    private Map<String, Object> makeJwtPayload(UserDetails userDetails, long expireTime) {
-        GrantedAuthority authority =  userDetails.getAuthorities().stream()
-            .findFirst()
-            .orElseThrow();
-
+    private Map<String, Object> makeJwtPayload(SignInSuccessUserDetailsDto userDetails, long expireTime) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("email", userDetails.getUsername());
-        claims.put("role", authority);
+        claims.put("id", userDetails.getIdentifyNo());
+        claims.put("email", userDetails.getEmail());
+        claims.put("role", userDetails.getAuthorities());
         claims.put("createAt", new Date().getTime());
         claims.put("expireAt", expireTime);
 
