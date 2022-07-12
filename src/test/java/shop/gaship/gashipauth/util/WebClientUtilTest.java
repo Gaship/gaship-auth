@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 /**
  * packageName    : shop.gaship.gashipauth.util
@@ -27,7 +28,8 @@ import org.springframework.http.MediaType;
 class WebClientUtilTest {
     @Test
     void get() {
-        JsonPlaceHolderResult result = new WebClientUtil<JsonPlaceHolderResult>().get(
+        ResponseEntity<JsonPlaceHolderResult> result =
+            new WebClientUtil<JsonPlaceHolderResult>().get(
             "https://jsonplaceholder.typicode.com",
             "/todos/1",
             null,
@@ -35,10 +37,12 @@ class WebClientUtilTest {
             JsonPlaceHolderResult.class
         );
 
-        assertThat(result.getCompleted()).isFalse();
-        assertThat(result.getId()).isEqualTo(1);
-        assertThat(result.getUserId()).isEqualTo(1);
-        assertThat(result.getTitle()).isNotNull();
+        JsonPlaceHolderResult bodyResult = result.getBody();
+
+        assertThat(bodyResult.getCompleted()).isFalse();
+        assertThat(bodyResult.getId()).isEqualTo(1);
+        assertThat(bodyResult.getUserId()).isEqualTo(1);
+        assertThat(bodyResult.getTitle()).isNotNull();
     }
 
     @Test
@@ -51,30 +55,35 @@ class WebClientUtilTest {
         headers.put(HttpHeaders.CONTENT_TYPE,
             Collections.singletonList(MediaType.APPLICATION_JSON_VALUE));
 
-        JsonPlaceHolderResult result = new WebClientUtil<JsonPlaceHolderResult>().get(
+        ResponseEntity<JsonPlaceHolderResult> result =
+            new WebClientUtil<JsonPlaceHolderResult>().get(
             "https://jsonplaceholder.typicode.com",
             "/todos/1",
             params, headers,
             JsonPlaceHolderResult.class
         );
 
-        assertThat(result.getCompleted()).isFalse();
-        assertThat(result.getId()).isEqualTo(1);
-        assertThat(result.getUserId()).isEqualTo(1);
-        assertThat(result.getTitle()).isNotNull();
+        JsonPlaceHolderResult bodyResult = result.getBody();
+
+        assertThat(bodyResult.getCompleted()).isFalse();
+        assertThat(bodyResult.getId()).isEqualTo(1);
+        assertThat(bodyResult.getUserId()).isEqualTo(1);
+        assertThat(bodyResult.getTitle()).isNotNull();
     }
 
     @Test
-    void postTest() throws InterruptedException {
+    void postTest() {
         Map<String, String> value = new HashMap<>();
         value.put("hello", "hi");
-        new WebClientUtil<JsonPlaceHolderResult>().post(
+        JsonPlaceHolderResult result = new WebClientUtil<JsonPlaceHolderResult>().post(
                 "https://jsonplaceholder.typicode.com",
                 "/posts",
                 null,
                 null,
                 value,
                 JsonPlaceHolderResult.class
-            );
+            ).getBody();
+
+        assertThat(result.getId()).isEqualTo(101);
     }
 }
