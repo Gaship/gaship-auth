@@ -1,4 +1,4 @@
-package shop.gaship.gashipauth.util;
+package shop.gaship.gashipauth.token.util;
 
 import io.jsonwebtoken.Jwts;
 import java.security.Key;
@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 @Component
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package shop.gaship.gashipauth.util;
+package shop.gaship.gashipauth.token.dto;
 
 import java.util.List;
 import lombok.Getter;

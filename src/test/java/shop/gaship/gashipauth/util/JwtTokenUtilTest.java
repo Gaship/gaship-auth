@@ -3,10 +3,17 @@ package shop.gaship.gashipauth.util;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.Resource;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipauth.token.util.JwtTokenUtil;
 
 /**
  * packageName    : shop.gaship.gashipauth.util <br/>
