@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipauth.token.dto.JwtTokenDto;
 import shop.gaship.gashipauth.token.service.TokenService;
-import shop.gaship.gashipauth.util.JwtTokenUtil;
-import shop.gaship.gashipauth.util.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipauth.token.util.JwtTokenUtil;
+import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 /**
  * packageName    : shop.gaship.gashipauth.token <br/>

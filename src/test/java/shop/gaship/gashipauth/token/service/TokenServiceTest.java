@@ -3,17 +3,17 @@ package shop.gaship.gashipauth.token.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.spy;
 
-import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipauth.token.dto.JwtTokenDto;
-import shop.gaship.gashipauth.util.JwtTokenUtil;
-import shop.gaship.gashipauth.util.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipauth.token.service.impl.TokenServiceImpl;
+import shop.gaship.gashipauth.token.util.JwtTokenUtil;
+import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 /**
  * packageName    : shop.gaship.gashipauth.token.service <br/>
@@ -26,7 +26,8 @@ import shop.gaship.gashipauth.util.SignInSuccessUserDetailsDto;
  * -----------------------------------------------------------  <br/>
  * 2022/07/11           김민수               최초 생성                         <br/>
  */
-@SpringBootTest
+@ExtendWith({SpringExtension.class})
+@Import(TokenServiceImpl.class)
 class TokenServiceTest {
     //sut
     @Autowired

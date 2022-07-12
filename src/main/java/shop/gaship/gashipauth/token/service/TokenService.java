@@ -1,7 +1,7 @@
 package shop.gaship.gashipauth.token.service;
 
 import shop.gaship.gashipauth.token.dto.JwtTokenDto;
-import shop.gaship.gashipauth.util.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 /**
  * packageName    : shop.gaship.gashipauth.token.service <br/>

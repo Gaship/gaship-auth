@@ -9,10 +9,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import shop.gaship.gashipauth.util.WebClientUtil;
+import shop.gaship.gashipauth.util.dto.SecureKeyResponse;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-public class JwtConfig {
+public class AuthenticationConfig {
     @Value("${secure.keymanager.url}")
     private String baseUrl;
 
@@ -22,22 +23,48 @@ public class JwtConfig {
     @Value("${secure.keymanager.jwt-secure-key}")
     private String jwtKeypair;
 
+    @Value("${secure.mail.appkey}")
+    private String mailAppKey;
+
+    @Value("${secure.mail.email-notification-secure-key}")
+    private String mailKeypair;
+
 
     @Bean
     public Key tokenKey() {
-        String secureKey = new WebClientUtil<String>()
+        SecureKeyResponse secureKey = new WebClientUtil<SecureKeyResponse>()
             .get(
                 baseUrl,
                 "/keymanager/v1.0/appkey/" + appKey + "/secrets/" + jwtKeypair,
                 null,
                 null,
-                String.class
+                SecureKeyResponse.class
             ).getBody();
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secureKey);
+        byte[] apiKeySecretBytes =
+            DatatypeConverter.parseBase64Binary(secureKey.getBody().getSecret());
 
         return new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+    }
+
+    @Bean
+    public String mailSenderSecretKey() {
+        return new WebClientUtil<SecureKeyResponse>()
+            .get(
+                baseUrl,
+                "/keymanager/v1.0/appkey/" + appKey + "/secrets/" + mailKeypair,
+                null,
+                null,
+                SecureKeyResponse.class
+            ).getBody()
+            .getBody()
+            .getSecret();
+    }
+
+    @Bean
+    public String mailAppKey() {
+        return mailAppKey;
     }
 }
