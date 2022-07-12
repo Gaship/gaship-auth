@@ -1,9 +1,13 @@
 package shop.gaship.gashipauth.verify.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.gaship.gashipauth.util.dto.RequestSuccessDto;
+import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
+import shop.gaship.gashipauth.verify.service.VerifyService;
 
 /**
  * packageName    : shop.gaship.gashipauth.verify.controller <br/>
@@ -18,10 +22,16 @@ import shop.gaship.gashipauth.util.dto.RequestSuccessDto;
  */
 @RestController
 @RequestMapping("/securities/verify")
+@RequiredArgsConstructor
 public class VerifyController {
+    private final VerifyService verifyService
+        ;
     @GetMapping("/email")
-    public RequestSuccessDto requestEmailVerify(){
-
+    public RequestSuccessDto requestEmailVerify(@RequestParam String address){
+        boolean isSend = verifyService.sendSignUpVerifyEmail(address);
+        if(!isSend){
+            throw new EmailSendFailureException("서버의 오류로 인해 전송에 실패했습니다.");
+        }
         return new RequestSuccessDto();
     }
 }
