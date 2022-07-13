@@ -3,11 +3,12 @@ package shop.gaship.gashipauth.verify.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
+import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 import shop.gaship.gashipauth.verify.service.VerifyService;
 
 /**
@@ -40,6 +42,7 @@ class VerifyControllerTest {
     VerifyService verifyService;
 
     @Test
+    @DisplayName("이메일 인증 정상 요청")
     void requestEmailVerify() throws Exception {
         String testEmail = "example@nhn.com";
         given(verifyService.sendSignUpVerifyEmail(testEmail))
@@ -53,6 +56,7 @@ class VerifyControllerTest {
     }
 
     @Test
+    @DisplayName("이메일 인증 요청 실패 : 이메일 형식이 다른거나, 전송요청이 실패했을때 ")
     void requestEmailVerifyFailure() throws Exception {
         String testEmail = "example@nhn.com";
         given(verifyService.sendSignUpVerifyEmail(testEmail))
@@ -60,8 +64,58 @@ class VerifyControllerTest {
 
         mockMvc.perform(get("/securities/verify/email")
                 .param("address", testEmail))
+            .andExpect(status().is4xxClientError())
             .andExpect(result ->
                 assertThat(result.getResolvedException().getClass()).isEqualTo(
                     EmailSendFailureException.class));
+    }
+
+    @Test
+    @DisplayName("이메일 인증 검증 확인 성공")
+    void verifyEmailTest() throws Exception {
+        String verifyCode = "easd-123-12312-1sdad";
+        given(verifyService.approveVerificationEmail(verifyCode))
+            .willReturn(true);
+
+        mockMvc.perform(get("/securities/verify/email/{verifyCode}", verifyCode))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.requestStatus").value("success"));
+    }
+
+    @Test
+    @DisplayName("이메일 검증 확인 실패 : 검증결과가 false일 경우")
+    void verifyEmailFailTest() throws Exception {
+        String verifyCode = "easd-123-12312-1sdad";
+        given(verifyService.approveVerificationEmail(verifyCode))
+            .willReturn(false);
+
+        mockMvc.perform(get("/securities/verify/email/{verifyCode}", verifyCode))
+            .andExpect(status().is4xxClientError())
+            .andExpect(result ->
+                assertThat(result.getResolvedException().getClass()).isEqualTo(
+                    EmailVerificationImpossibleException.class))
+            .andExpect(jsonPath("$.requestStatus")
+                .value("failure"))
+            .andExpect(jsonPath("$.message")
+                .value("이메일 인증시간이 만료되거나, 검증이 불가능합니다."));
+    }
+
+    @Test
+    @DisplayName("이메일 검증 확인 실패 : 이미 인증이 되었거나, 인증이 존재하지 않는경우")
+    void verifyEmailThrowExceptionTest() throws Exception {
+        String verifyCode = "easd-123-12312-1sdad";
+        given(verifyService.approveVerificationEmail(verifyCode))
+            .willThrow(new EmailVerificationImpossibleException());
+
+        mockMvc.perform(get("/securities/verify/email/{verifyCode}", verifyCode))
+            .andExpect(status().is4xxClientError())
+            .andExpect(result ->
+                assertThat(result.getResolvedException().getClass()).isEqualTo(
+                    EmailVerificationImpossibleException.class))
+            .andExpect(jsonPath("$.requestStatus")
+                .value("failure"))
+            .andExpect(jsonPath("$.message")
+                .value("이메일 인증시간이 만료되거나, 검증이 불가능합니다."));
     }
 }

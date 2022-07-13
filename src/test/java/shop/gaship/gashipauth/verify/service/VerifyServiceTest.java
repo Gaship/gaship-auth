@@ -88,6 +88,6 @@ class VerifyServiceTest {
         assertThatThrownBy(() ->
             verifyService.approveVerificationEmail("123bd87b-c6bf-4e45-95c5-650ca76de779"))
             .isInstanceOf(EmailVerificationImpossibleException.class)
-            .hasMessage("이메일 인증시간이 만료되거나, 불가능합니다.");
+            .hasMessage("이메일 인증시간이 만료되거나, 검증이 불가능합니다.");
     }
 }
