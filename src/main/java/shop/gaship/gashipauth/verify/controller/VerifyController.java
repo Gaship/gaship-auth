@@ -29,6 +29,14 @@ public class VerifyController {
     private final VerifyService verifyService;
 
 
+    /**
+     * methodName : requestEmailVerify
+     * author : 김민수
+     * description : 회원가입 이메일 검증 요청시 인증 이메일을 전송해주는 컨트롤러입니다.
+     *
+     * @param address : 회원가입 할 유저의 이메일 주소입니다.
+     * @return RequestSuccessDto : 요청에 성공했다는 응답을 알리기위한 dto객체입니다.
+     */
     @GetMapping("/email")
     public RequestSuccessDto requestEmailVerify(@RequestParam String address) {
         boolean isSend = verifyService.sendSignUpVerifyEmail(address);
@@ -40,6 +48,14 @@ public class VerifyController {
         return new RequestSuccessDto();
     }
 
+    /**
+     * methodName : verifyEmail
+     * author : 김민수
+     * description : 회원가입을 위한 이메일 주소인증을 승인하기 위한 컨트롤러입니다.
+     *
+     * @param verifyCode : 회원에게 전송되었던 인증코드입니다.
+     * @return RequestSuccessDto : 인증이 완료가되었다는 응답을 알리기위한 dto객체입니다.
+     */
     @GetMapping("/email/{verifyCode}")
     public RequestSuccessDto verifyEmail(@PathVariable String verifyCode) {
         boolean isVerified = verifyService.approveVerificationEmail(verifyCode);
