@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import shop.gaship.gashipauth.util.dto.RequestSuccessDto;
 import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
 import shop.gaship.gashipauth.verify.service.VerifyService;
+import shop.gaship.gashipauth.verify.service.impl.VerifyServiceImpl;
 
 /**
  * packageName    : shop.gaship.gashipauth.verify.controller <br/>
@@ -24,8 +25,9 @@ import shop.gaship.gashipauth.verify.service.VerifyService;
 @RequestMapping("/securities/verify")
 @RequiredArgsConstructor
 public class VerifyController {
-    private final VerifyService verifyService
-        ;
+    private final VerifyService verifyService;
+
+
     @GetMapping("/email")
     public RequestSuccessDto requestEmailVerify(@RequestParam String address){
         boolean isSend = verifyService.sendSignUpVerifyEmail(address);
@@ -34,4 +36,6 @@ public class VerifyController {
         }
         return new RequestSuccessDto();
     }
+
+
 }

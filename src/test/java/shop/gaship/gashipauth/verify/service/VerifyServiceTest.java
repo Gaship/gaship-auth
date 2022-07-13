@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
+import shop.gaship.gashipauth.verify.service.impl.VerifyServiceImpl;
 import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
 
 /**
@@ -31,8 +32,7 @@ import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
  * 2022/07/13           김민수               최초 생성                         <br/>
  */
 @ExtendWith({SpringExtension.class})
-@Import({VerifyService.class})
-//@SpringBootTest
+@Import({VerifyServiceImpl.class})
 class VerifyServiceTest {
 
     @Autowired
