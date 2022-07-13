@@ -1,8 +1,8 @@
-package shop.gaship.gashipauth.verify.service;
+package shop.gaship.gashipauth.verify.exception;
 
 /**
- * packageName    : shop.gaship.gashipauth.verify.service <br/>
- * fileName       : VerifyService <br/>
+ * packageName    : shop.gaship.gashipauth.verify.exception <br/>
+ * fileName       : EmailVerifictionImpossibleExcpetion <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/13 <br/>
  * description    : <br/>
@@ -11,8 +11,8 @@ package shop.gaship.gashipauth.verify.service;
  * -----------------------------------------------------------  <br/>
  * 2022/07/13           김민수               최초 생성                         <br/>
  */
-public interface VerifyService {
-    boolean sendSignUpVerifyEmail(String receiverEmail);
-
-    boolean approveVerificationEmail(String abc);
+public class EmailVerificationImpossibleException extends RuntimeException {
+    public EmailVerificationImpossibleException() {
+        super("이메일 인증시간이 만료되거나, 불가능합니다.");
+    }
 }
