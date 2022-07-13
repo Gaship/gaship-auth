@@ -12,7 +12,6 @@ import shop.gaship.gashipauth.util.WebClientUtil;
 import shop.gaship.gashipauth.util.dto.SecureKeyResponse;
 
 @Configuration
-@PropertySource("classpath:application.properties")
 public class AuthenticationConfig {
     @Value("${secure.keymanager.url}")
     private String baseUrl;

@@ -10,9 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
-import shop.gaship.gashipauth.exceptions.NoResponseDataException;
+import shop.gaship.gashipauth.token.exceptions.NoResponseDataException;
 
 /**
  * packageName    : shop.gaship.gashipauth.util
@@ -29,7 +30,7 @@ import shop.gaship.gashipauth.exceptions.NoResponseDataException;
 @Slf4j
 public class WebClientUtil<T> {
     private static final String ERROR_MESSAGE = "응답결과가 존재하지 않습니다.";
-    private static final Duration timeOut = Duration.of(3, ChronoUnit.SECONDS);
+    private static final Duration timeOut = Duration.of(5, ChronoUnit.SECONDS);
 
     /**
      * methodName : get

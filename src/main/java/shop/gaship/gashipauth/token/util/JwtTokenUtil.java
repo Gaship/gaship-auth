@@ -1,10 +1,14 @@
 package shop.gaship.gashipauth.token.util;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
@@ -76,10 +80,35 @@ public class JwtTokenUtil {
         return headerMap;
     }
 
-    private Date getExpireDate(long seconds){
+    private Date getExpireDate(long seconds) { // FIXME : 메서드 이름이 set이 되는게 맞지 않을까?
         Date expireTime = new Date();
         expireTime.setTime(expireTime.getTime() + seconds);
 
         return expireTime;
+    }
+
+    public Date getExpiredDate(String token) {
+        Jws<Claims> claims = Jwts.parser().setSigningKey(createKey).parseClaimsJws(token);
+
+        return claims.getBody().getExpiration();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(createKey).parseClaimsJws(token);
+
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getEmail(String token) {
+        return Jwts.parser().setSigningKey(createKey).parseClaimsJws(token).getBody()
+            .getSubject();
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+        return request.getHeader("X-AUTH-TOKEN");
     }
 }

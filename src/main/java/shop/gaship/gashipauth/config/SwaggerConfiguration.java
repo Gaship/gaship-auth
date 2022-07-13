@@ -18,7 +18,7 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo())
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.example.gashipsecurity"))
+            .apis(RequestHandlerSelectors.basePackage("shop.gaship.gashipauth"))
             .paths(PathSelectors.any())
             .build();
     }

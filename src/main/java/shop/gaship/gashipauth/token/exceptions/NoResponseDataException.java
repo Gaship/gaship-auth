@@ -1,4 +1,4 @@
-package shop.gaship.gashipauth.exceptions;
+package shop.gaship.gashipauth.token.exceptions;
 
 /**
  * packageName    : shop.gaship.gashipauth.exceptions
