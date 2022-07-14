@@ -1,5 +1,6 @@
 package shop.gaship.gashipauth.util;
 
+@Deprecated
 public class QueryParam {
     String name;
     Object[] values;

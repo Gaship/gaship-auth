@@ -10,7 +10,7 @@ import lombok.Getter;
  * fileName       : EmailSendDto <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/12 <br/>
- * description    : <br/>
+ * description    : 이메일을 전송하기위한 틀의 성격을 가진 클래스입니다.<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>

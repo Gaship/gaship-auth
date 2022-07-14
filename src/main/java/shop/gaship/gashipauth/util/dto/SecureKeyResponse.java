@@ -7,7 +7,7 @@ import lombok.Getter;
  * fileName       : SecureKeyResponse <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/10 <br/>
- * description    : <br/>
+ * description    : nhn secure key manager의 body 타입입니다.<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>

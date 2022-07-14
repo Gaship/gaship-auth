@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
  * fileName       : JwtTokenDto <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/11 <br/>
- * description    : <br/>
+ * description    : jwt토큰을 담는 클래스입니다.<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>

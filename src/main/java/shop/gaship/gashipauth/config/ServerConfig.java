@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * fileName       : ServerConfig <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/15 <br/>
- * description    : <br/>
+ * description    : 서버의 일반적인 환경설정을 수행하는 클래스입니다.<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>

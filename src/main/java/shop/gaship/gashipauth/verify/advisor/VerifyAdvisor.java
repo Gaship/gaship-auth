@@ -16,11 +16,11 @@ import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleExcept
  * fileName       : VerifyAdvisor <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/13 <br/>
- * description    : <br/>
+ * description    : 인증관련 오류발생시 handling을 해주는 에러 핸들 클래스입니다. <br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>
- * 2022/07/13           김민수               최초 생성                         <br/>
+ * 2022/07/13        김민수               최초 생성                 <br/>
  */
 @RestControllerAdvice
 @Slf4j

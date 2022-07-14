@@ -12,6 +12,17 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * packageName    : shop.gaship.gashipauth.config <br/>
+ * fileName       : RedisConfig <br/>
+ * author         : 최겸준 <br/>
+ * date           : 2022/07/15 <br/>
+ * description    : 레디스의 연결 설정등을 하는 클래스입니다.<br/>
+ * ===========================================================  <br/>
+ * DATE              AUTHOR             NOTE                    <br/>
+ * -----------------------------------------------------------  <br/>
+ * 2022/07/15           최겸준               최초 생성                         <br/>
+ */
 @Configuration
 @PropertySource("classpath:redis.properties")
 public class RedisConfig implements BeanClassLoaderAware {

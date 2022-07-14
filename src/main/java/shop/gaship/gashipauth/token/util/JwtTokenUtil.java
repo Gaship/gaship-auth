@@ -13,6 +13,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
+/**
+ * packageName    : shop.gaship.gashipauth.token <br/>
+ * fileName       : JwtTokenUtil <br/>
+ * author         : 김민수 <br/>
+ * date           : 2022/07/09 <br/>
+ * description    : 토큰을 발급해주는 본 구현 클래스입니다.<br/>
+ * ===========================================================  <br/>
+ * DATE              AUTHOR             NOTE                    <br/>
+ * -----------------------------------------------------------  <br/>
+ * 2022/07/09           김민수               최초 생성              <br/>
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtil {

@@ -27,6 +27,7 @@ import shop.gaship.gashipauth.exceptions.NoResponseDataException;
  * 2022/07/10        김민수           웹클라이언트 결과 타입변경
  */
 @Slf4j
+@Deprecated
 public class WebClientUtil<T> {
     private static final String ERROR_MESSAGE = "응답결과가 존재하지 않습니다.";
     private static final Duration timeOut = Duration.of(3, ChronoUnit.SECONDS);

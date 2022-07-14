@@ -19,7 +19,7 @@ import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
  * fileName       : VerifyServiceImpl <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/12 <br/>
- * description    : <br/>
+ * description    : 검증을 위한 VerifyService의 구현 클래스입니다. <br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>

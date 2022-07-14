@@ -8,7 +8,7 @@ import lombok.Getter;
  * fileName       : EmailSendSuccessfulDto <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/12 <br/>
- * description    : <br/>
+ * description    : 이메일을 성공적을 보냈을 시의 http body결과를 클래스로 표현한 것입니다.<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>

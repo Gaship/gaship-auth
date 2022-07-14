@@ -12,6 +12,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipauth.exceptions.NoResponseDataException;
 import shop.gaship.gashipauth.util.dto.SecureKeyResponse;
 
+/**
+ * packageName    : shop.gaship.gashipauth.config <br/>
+ * fileName       : AuthenticationConfig <br/>
+ * author         : 김민수 <br/>
+ * date           : 2022/07/15 <br/>
+ * description    : 보안과 관련된 환경설정을 위한 클래스입니다.<br/>
+ * ===========================================================  <br/>
+ * DATE              AUTHOR             NOTE                    <br/>
+ * -----------------------------------------------------------  <br/>
+ * 2022/07/15           김민수               최초 생성                         <br/>
+ */
 @Configuration
 public class AuthenticationConfig {
     private static final String ERROR_MESSAGE = "응답결과가 존재하지 않습니다.";

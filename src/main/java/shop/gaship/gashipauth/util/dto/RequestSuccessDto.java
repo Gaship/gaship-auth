@@ -7,11 +7,11 @@ import lombok.Getter;
  * fileName       : RequestSuccessDto <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/12 <br/>
- * description    : <br/>
+ * description    : 사용자의 응답에 일반적인 성공시 주기위한 클래스입니다.<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>
- * 2022/07/12           김민수               최초 생성                         <br/>
+ * 2022/07/12           김민수               최초 생성              <br/>
  */
 @Getter
 public class RequestSuccessDto {
