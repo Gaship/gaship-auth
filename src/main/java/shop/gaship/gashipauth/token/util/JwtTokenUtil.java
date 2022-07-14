@@ -2,6 +2,10 @@ package shop.gaship.gashipauth.token.util;
 
 import io.jsonwebtoken.Jwts;
 import java.security.Key;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,16 +47,19 @@ public class JwtTokenUtil {
         return getToken(userDetails, ONE_MONTH_AT_MILLI_SEC);
     }
 
-    private String getToken(SignInSuccessUserDetailsDto userDetails, long seconds) {
+    private String getToken(SignInSuccessUserDetailsDto userDetails, long milliSeconds) {
         Map<String, Object> header = makeJwtHeader();
-        Date accessTokenExpireDate = getExpireDate(seconds);
-        Map<String, Object> payload = makeJwtPayload(userDetails, accessTokenExpireDate.getTime());
+        LocalDateTime accessTokenExpireDate = getExpireDate(milliSeconds);
+        long milliSecondsExpireDate = accessTokenExpireDate
+            .atZone(ZoneId.of("Asia/Tokyo"))
+            .toInstant().toEpochMilli();
+        Map<String, Object> payload = makeJwtPayload(userDetails, milliSecondsExpireDate);
 
         return Jwts.builder()
             .setHeader(header)
             .setClaims(payload)
             .signWith(createKey)
-            .setExpiration(accessTokenExpireDate)
+            .setExpiration(Timestamp.valueOf(accessTokenExpireDate))
             .compact();
     }
 
@@ -60,7 +67,6 @@ public class JwtTokenUtil {
     private Map<String, Object> makeJwtPayload(SignInSuccessUserDetailsDto userDetails, long expireTime) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userDetails.getIdentifyNo());
-        claims.put("email", userDetails.getEmail());
         claims.put("role", userDetails.getAuthorities());
         claims.put("createAt", new Date().getTime());
         claims.put("expireAt", expireTime);
@@ -76,10 +82,8 @@ public class JwtTokenUtil {
         return headerMap;
     }
 
-    private Date getExpireDate(long seconds){
-        Date expireTime = new Date();
-        expireTime.setTime(expireTime.getTime() + seconds);
-
-        return expireTime;
+    private LocalDateTime getExpireDate(long milliSeconds){
+        LocalDateTime expireTime = LocalDateTime.now();
+        return expireTime.plus(Duration.ofMillis(milliSeconds));
     }
 }

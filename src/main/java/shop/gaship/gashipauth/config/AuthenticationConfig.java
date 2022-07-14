@@ -2,18 +2,20 @@ package shop.gaship.gashipauth.config;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
+import java.time.Duration;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import shop.gaship.gashipauth.util.WebClientUtil;
+import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipauth.exceptions.NoResponseDataException;
 import shop.gaship.gashipauth.util.dto.SecureKeyResponse;
 
 @Configuration
-@PropertySource("classpath:application.properties")
 public class AuthenticationConfig {
+    private static final String ERROR_MESSAGE = "응답결과가 존재하지 않습니다.";
+
     @Value("${secure.keymanager.url}")
     private String baseUrl;
 
@@ -29,17 +31,19 @@ public class AuthenticationConfig {
     @Value("${secure.mail.email-notification-secure-key}")
     private String mailKeypair;
 
+    @Value("${secure.mail.url}")
+    private String mailBaseurl;
 
     @Bean
     public Key tokenKey() {
-        SecureKeyResponse secureKey = new WebClientUtil<SecureKeyResponse>()
-            .get(
-                baseUrl,
-                "/keymanager/v1.0/appkey/" + appKey + "/secrets/" + jwtKeypair,
-                null,
-                null,
-                SecureKeyResponse.class
-            ).getBody();
+        SecureKeyResponse secureKey = WebClient.create(baseUrl).get()
+            .uri("/keymanager/v1.0/appkey/{appKey}/secrets/{jwtKeypair}", appKey, jwtKeypair)
+            .retrieve()
+            .toEntity(SecureKeyResponse.class)
+            .timeout(Duration.ofSeconds(3))
+            .blockOptional()
+            .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
+            .getBody();
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -51,14 +55,14 @@ public class AuthenticationConfig {
 
     @Bean
     public String mailSenderSecretKey() {
-        return new WebClientUtil<SecureKeyResponse>()
-            .get(
-                baseUrl,
-                "/keymanager/v1.0/appkey/" + appKey + "/secrets/" + mailKeypair,
-                null,
-                null,
-                SecureKeyResponse.class
-            ).getBody()
+        return WebClient.create(baseUrl).get()
+            .uri("/keymanager/v1.0/appkey/{appKey}/secrets/{mailKeypair}", appKey, mailKeypair)
+            .retrieve()
+            .toEntity(SecureKeyResponse.class)
+            .timeout(Duration.ofSeconds(3))
+            .blockOptional()
+            .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
+            .getBody()
             .getBody()
             .getSecret();
     }
@@ -66,5 +70,10 @@ public class AuthenticationConfig {
     @Bean
     public String mailAppKey() {
         return mailAppKey;
+    }
+
+    @Bean
+    public String mailBaseurl(){
+        return mailBaseurl;
     }
 }

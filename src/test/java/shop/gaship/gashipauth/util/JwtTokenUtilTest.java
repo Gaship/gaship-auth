@@ -35,7 +35,6 @@ class JwtTokenUtilTest {
     void createUtil() {
         SignInSuccessUserDetailsDto tokenDto = new SignInSuccessUserDetailsDto();
         tokenDto.setAuthorities(List.of("ROLE_ADMIN"));
-        tokenDto.setEmail("examole@nhn.com");
         String accessToken = jwtTokenUtil.createAccessToken(tokenDto);
 
         assertThat(accessToken).isNotNull();
@@ -46,7 +45,6 @@ class JwtTokenUtilTest {
     void createAccessToken() {
         SignInSuccessUserDetailsDto tokenDto = new SignInSuccessUserDetailsDto();
         tokenDto.setAuthorities(List.of("ROLE_ADMIN"));
-        tokenDto.setEmail("examole@nhn.com");
         String accessToken = jwtTokenUtil.createAccessToken(tokenDto);
 
         assertThat(accessToken).isNotNull();

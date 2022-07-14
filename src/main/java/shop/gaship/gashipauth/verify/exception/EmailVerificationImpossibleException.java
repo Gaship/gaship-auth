@@ -12,7 +12,8 @@ package shop.gaship.gashipauth.verify.exception;
  * 2022/07/13           김민수               최초 생성                         <br/>
  */
 public class EmailVerificationImpossibleException extends RuntimeException {
+    private static final String MESSAGE = "이메일 인증시간이 만료되거나, 검증이 불가능합니다.";
     public EmailVerificationImpossibleException() {
-        super("이메일 인증시간이 만료되거나, 검증이 불가능합니다.");
+        super(MESSAGE);
     }
 }

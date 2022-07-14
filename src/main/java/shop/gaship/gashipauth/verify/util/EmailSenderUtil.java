@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import shop.gaship.gashipauth.util.WebClientUtil;
@@ -23,17 +24,11 @@ import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
  * 2022/07/12           김민수               최초 생성                         <br/>
  */
 @Component
-//@RequiredArgsConstructor
+@AllArgsConstructor
 public class EmailSenderUtil {
-    private static final String MAIL_SENDER_BASE_URL = "https://api-mail.cloud.toast.com";
-
+    private final String mailBaseurl;
     private final String mailSenderSecretKey;
     private final String mailAppKey;
-
-    public EmailSenderUtil(String mailSenderSecretKey, String mailAppKey) {
-        this.mailSenderSecretKey = mailSenderSecretKey;
-        this.mailAppKey = mailAppKey;
-    }
 
     public void sendMail(EmailSendDto emailSendDto) {
         Map<String, List<String>> headers = new HashMap<>();
@@ -42,7 +37,7 @@ public class EmailSenderUtil {
 
         ResponseEntity<EmailSendSuccessfulDto> result =
             new WebClientUtil<EmailSendSuccessfulDto>().post(
-                MAIL_SENDER_BASE_URL,
+                mailBaseurl,
                 "/email/v2.0/appKeys/" + mailAppKey + "/sender/mail",
                 null,
                 headers,

@@ -19,6 +19,5 @@ import lombok.Setter;
 @Setter
 public class SignInSuccessUserDetailsDto{
     private Long identifyNo;
-    private String email;
     private List<String> authorities;
 }

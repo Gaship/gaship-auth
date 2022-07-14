@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,8 +94,6 @@ class VerifyControllerTest {
             .andExpect(result ->
                 assertThat(result.getResolvedException().getClass()).isEqualTo(
                     EmailVerificationImpossibleException.class))
-            .andExpect(jsonPath("$.requestStatus")
-                .value("failure"))
             .andExpect(jsonPath("$.message")
                 .value("이메일 인증시간이 만료되거나, 검증이 불가능합니다."));
     }
@@ -113,8 +110,6 @@ class VerifyControllerTest {
             .andExpect(result ->
                 assertThat(result.getResolvedException().getClass()).isEqualTo(
                     EmailVerificationImpossibleException.class))
-            .andExpect(jsonPath("$.requestStatus")
-                .value("failure"))
             .andExpect(jsonPath("$.message")
                 .value("이메일 인증시간이 만료되거나, 검증이 불가능합니다."));
     }

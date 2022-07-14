@@ -28,14 +28,6 @@ public class TokenServiceImpl implements TokenService {
         String accessToken = tokenUtil.createAccessToken(userDetailsDto);
         String refreshToken = tokenUtil.createRefreshToken(userDetailsDto);
 
-        return generateJwtToken(accessToken, refreshToken);
-    }
-
-    private JwtTokenDto generateJwtToken(String accessToken, String refreshToken) {
-        JwtTokenDto jwtTokenDto = new JwtTokenDto();
-        jwtTokenDto.setAccessToken(accessToken);
-        jwtTokenDto.setRefreshToken(refreshToken);
-
-        return jwtTokenDto;
+        return new JwtTokenDto(accessToken, refreshToken);
     }
 }

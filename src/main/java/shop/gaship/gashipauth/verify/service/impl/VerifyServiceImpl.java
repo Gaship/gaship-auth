@@ -30,6 +30,7 @@ import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
 public class VerifyServiceImpl implements VerifyService {
     private static final String TEMPLATE_ID = "signUpTemplate";
 
+    private final String gashipFrontServerUrl;
     private final EmailSenderUtil emailSenderUtil;
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -40,7 +41,7 @@ public class VerifyServiceImpl implements VerifyService {
 
         // 해당 url은 프론트 서버를 의미한다.
         Map<String, String> templateParam =
-            Map.of("link", "http://localhost:8080/members/signUp/email-verify/" + verifyCode);
+            Map.of("link", gashipFrontServerUrl + "/members/signUp/email-verify/" + verifyCode);
         String receiveType = "MRT0";
 
         EmailSendDto emailSendDto = EmailSendDto.builder()
