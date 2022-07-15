@@ -10,6 +10,17 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * packageName    : shop.gaship.gashipauth.config <br/>
+ * fileName       : SwaggerConfiguration <br/>
+ * author         : 최겸준 <br/>
+ * date           : 2022/07/07 <br/>
+ * description    : 해당서버의 REST API문서화 시켜주는 스웨거 환경설정입니다.<br/>
+ * ===========================================================  <br/>
+ * DATE              AUTHOR             NOTE                    <br/>
+ * -----------------------------------------------------------  <br/>
+ * 2022/07/07           최겸준               최초 생성                         <br/>
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfiguration {
