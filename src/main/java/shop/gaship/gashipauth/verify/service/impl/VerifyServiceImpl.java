@@ -15,15 +15,10 @@ import shop.gaship.gashipauth.verify.service.VerifyService;
 import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
 
 /**
- * packageName    : shop.gaship.gashipauth.verify.service <br/>
- * fileName       : VerifyServiceImpl <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/12 <br/>
- * description    : 검증을 위한 VerifyService의 구현 클래스입니다. <br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/12           김민수               최초 생성                         <br/>
+ * 검증을 위한 VerifyService의 구현 클래스입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
@@ -34,6 +29,7 @@ public class VerifyServiceImpl implements VerifyService {
     private final EmailSenderUtil emailSenderUtil;
     private final RedisTemplate<String, String> redisTemplate;
 
+    @Override
     public boolean sendSignUpVerifyEmail(String receiverEmail) {
         String verifyCode = UUID.randomUUID().toString();
         redisTemplate.opsForSet().add(verifyCode, String.valueOf(true));
@@ -54,6 +50,7 @@ public class VerifyServiceImpl implements VerifyService {
         return true;
     }
 
+    @Override
     public boolean approveVerificationEmail(String verifyCode) {
         String result = redisTemplate.opsForSet().pop(verifyCode);
         

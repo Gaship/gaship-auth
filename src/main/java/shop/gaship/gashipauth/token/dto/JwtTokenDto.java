@@ -5,15 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * packageName    : shop.gaship.gashipfront.security.dto <br/>
- * fileName       : JwtTokenDto <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/11 <br/>
- * description    : jwt토큰을 담는 클래스입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/11           김민수               최초 생성                         <br/>
+ *
+ * jwt토큰을 담는 클래스입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Getter
 @AllArgsConstructor

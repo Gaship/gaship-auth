@@ -14,15 +14,11 @@ import org.springframework.stereotype.Component;
 import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 /**
- * packageName    : shop.gaship.gashipauth.token <br/>
- * fileName       : JwtTokenUtil <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/09 <br/>
- * description    : 토큰을 발급해주는 본 구현 클래스입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/09           김민수               최초 생성              <br/>
+ *
+ * 토큰을 발급해주는 본 구현 클래스입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Component
 @RequiredArgsConstructor
@@ -35,9 +31,7 @@ public class JwtTokenUtil {
     private final Key createKey;
 
     /**
-     * methodName : generateAccessToken
-     * author : 김민수
-     * description : 사용자에게 부여 할 access token입니다.
+     * 사용자에게 부여 할 access token입니다.
      *
      * @param userDetails : 사용자 인증 정보
      * @return string
@@ -47,9 +41,7 @@ public class JwtTokenUtil {
     }
 
     /**
-     * methodName : generateRefreshToken
-     * author : 김민수
-     * description : 사용자에게 부여 할 refresh token입니다.
+     * 사용자에게 부여 할 refresh token입니다.
      *
      * @param userDetails : 사용자 인증 정보
      * @return string
@@ -58,6 +50,13 @@ public class JwtTokenUtil {
         return getToken(userDetails, ONE_MONTH_AT_MILLI_SEC);
     }
 
+    /**
+     * Jws를 이용하여 Jwt토큰을 얻어내는 메서드입니다.
+     *
+     * @param userDetails  로그인한 회원의 정보가 담긴 객체입니다.
+     * @param milliSeconds 토큰을 파기할 시간입니다.(milli seconds 단위)
+     * @return 토큰 문자열
+     */
     private String getToken(SignInSuccessUserDetailsDto userDetails, long milliSeconds) {
         Map<String, Object> header = makeJwtHeader();
         LocalDateTime accessTokenExpireDate = getExpireDate(milliSeconds);
@@ -75,6 +74,13 @@ public class JwtTokenUtil {
     }
 
 
+    /**
+     * JWt 토큰의 payload를 생성합니다
+     *
+     * @param userDetails  로그인한 회원의 정보가 담긴 객체입니다.
+     * @param expireTime  파기될 시간입니다 (milli seconds 단위).
+     * @return the map
+     */
     private Map<String, Object> makeJwtPayload(SignInSuccessUserDetailsDto userDetails, long expireTime) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userDetails.getIdentifyNo());
@@ -85,6 +91,12 @@ public class JwtTokenUtil {
         return claims;
     }
 
+    /**
+     * Jwt 토큰의 헤더를 만듭니다.
+     *
+     * @see Map Map
+     * @return Map 형태로 header 정보를 담은 객체가 반환됩니다.
+     */
     private Map<String, Object> makeJwtHeader() {
         Map<String, Object> headerMap = new HashMap<>();
         headerMap.put("typ", "JWT");
@@ -93,6 +105,12 @@ public class JwtTokenUtil {
         return headerMap;
     }
 
+    /**
+     * 밀리초를 이용하여 파기 일자를 얻어냅니다.
+     *
+     * @param milliSeconds 현시간에서 더할 파기시간입니다. (milli seconds 단위)
+     * @return 토큰을 파기할 시간값을 가진 LocalDateTime 객체입니다.
+     */
     private LocalDateTime getExpireDate(long milliSeconds){
         LocalDateTime expireTime = LocalDateTime.now();
         return expireTime.plus(Duration.ofMillis(milliSeconds));

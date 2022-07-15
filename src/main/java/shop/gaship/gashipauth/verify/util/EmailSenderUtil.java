@@ -1,49 +1,47 @@
 package shop.gaship.gashipauth.verify.util;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import shop.gaship.gashipauth.util.WebClientUtil;
+import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipauth.exceptions.NoResponseDataException;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 import shop.gaship.gashipauth.verify.dto.EmailSendSuccessfulDto;
 import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
 
 /**
- * packageName    : shop.gaship.gashipauth.verify.util <br/>
- * fileName       : EmailSenderUtil <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/12 <br/>
- * description    : <br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/12           김민수               최초 생성                         <br/>
+ * 이메일을 전송하기위한 유틸형 클래스입니다
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Component
 @AllArgsConstructor
 public class EmailSenderUtil {
+    private static final String ERROR_MESSAGE = "요청 수행에 실패했습니다.";
     private final String mailBaseurl;
     private final String mailSenderSecretKey;
     private final String mailAppKey;
 
+    /**
+     * 이메일을 전송합니다.
+     *
+     * @param emailSendDto 이메일을 전송하기위한 정보들이 담긴 객체입니다.
+     */
     public void sendMail(EmailSendDto emailSendDto) {
-        Map<String, List<String>> headers = new HashMap<>();
-        List<String> headerValue = List.of(mailSenderSecretKey);
-        headers.put("X-Secret-Key", headerValue);
-
         ResponseEntity<EmailSendSuccessfulDto> result =
-            new WebClientUtil<EmailSendSuccessfulDto>().post(
-                mailBaseurl,
-                "/email/v2.0/appKeys/" + mailAppKey + "/sender/mail",
-                null,
-                headers,
-                emailSendDto,
-                EmailSendSuccessfulDto.class
-            );
+            WebClient.create(mailBaseurl).post()
+                .uri("/email/v2.0/appKeys/{mailAppKey}/sender/mail", mailAppKey)
+                .headers(
+                    httpHeaders -> httpHeaders.put("X-Secret-Key", List.of(mailSenderSecretKey)))
+                .bodyValue(emailSendDto)
+                .retrieve()
+                .toEntity(EmailSendSuccessfulDto.class)
+                .blockOptional()
+                .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE));
+
         EmailSendSuccessfulDto.Header header = Objects.requireNonNull(result.getBody()).getHeader();
 
         if (Boolean.FALSE.equals(header.getIsSuccessful())) {

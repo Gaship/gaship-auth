@@ -5,15 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * packageName    : shop.gaship.gashipauth.config <br/>
- * fileName       : ServerConfig <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/15 <br/>
- * description    : 서버의 일반적인 환경설정을 수행하는 클래스입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/15           김민수               최초 생성                         <br/>
+ *
+ * 서버의 일반적인 환경설정을 수행하는 클래스입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Configuration
 public class ServerConfig {

@@ -1,15 +1,10 @@
 package shop.gaship.gashipauth.verify.exception;
 
 /**
- * packageName    : shop.gaship.gashipauth.verify.exception <br/>
- * fileName       : EmailSendFailureException <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/12 <br/>
- * description    : 이메일 전송이 실패하였을 경우에 발생하는 예외입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/12           김민수               최초 생성                         <br/>
+ * 이메일 전송이 실패하였을 경우에 발생하는 예외입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 public class EmailSendFailureException extends RuntimeException {
     public EmailSendFailureException(String message) {

@@ -8,15 +8,11 @@ import shop.gaship.gashipauth.token.util.JwtTokenUtil;
 import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 /**
- * packageName    : shop.gaship.gashipauth.token <br/>
- * fileName       : ToeknServiceImpl <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/11 <br/>
- * description    : 토큰을 발급해주는 서비스 구현 클래스입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/11           김민수               최초 생성              <br/>
+ *
+ * 토큰을 발급해주는 서비스 구현 클래스입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
