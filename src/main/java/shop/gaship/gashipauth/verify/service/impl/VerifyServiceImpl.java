@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipauth.verify.dto.EmailReceiver;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
+import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 import shop.gaship.gashipauth.verify.service.VerifyService;
 import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
@@ -30,7 +31,7 @@ public class VerifyServiceImpl implements VerifyService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public boolean sendSignUpVerifyEmail(String receiverEmail) {
+    public VerificationCodeDto sendSignUpVerifyEmail(String receiverEmail) {
         String verifyCode = UUID.randomUUID().toString();
         redisTemplate.opsForSet().add(verifyCode, String.valueOf(true));
         redisTemplate.expire(verifyCode, 3, TimeUnit.MINUTES); // 3분제
@@ -47,17 +48,30 @@ public class VerifyServiceImpl implements VerifyService {
             .build();
         emailSenderUtil.sendMail(emailSendDto);
 
-        return true;
+        return new VerificationCodeDto(verifyCode);
     }
 
     @Override
     public boolean approveVerificationEmail(String verifyCode) {
         String result = redisTemplate.opsForSet().pop(verifyCode);
-        
+        redisTemplate.opsForSet().add(verifyCode, String.valueOf(false));
+        redisTemplate.expire(verifyCode, 1, TimeUnit.MINUTES);
+
+        return isCodePopped(result);
+    }
+
+    private boolean isCodePopped(String result) {
         if (Objects.isNull(result)) {
             throw new EmailVerificationImpossibleException();
         }
-        
+
         return Boolean.parseBoolean(result);
+    }
+
+    @Override
+    public boolean removeVerificationCode(String verifyCode) {
+        String result = redisTemplate.opsForSet().pop(verifyCode);
+
+        return !isCodePopped(result);
     }
 }

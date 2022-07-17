@@ -3,14 +3,15 @@ package shop.gaship.gashipauth.verify.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import shop.gaship.gashipauth.config.ServerConfig;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
+import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 import shop.gaship.gashipauth.verify.service.impl.VerifyServiceImpl;
 import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
@@ -36,7 +39,7 @@ import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
  * 2022/07/13           김민수               최초 생성                         <br/>
  */
 @ExtendWith({SpringExtension.class})
-@Import({VerifyServiceImpl.class})
+@Import({VerifyServiceImpl.class, ServerConfig.class})
 class VerifyServiceTest {
 
     @Autowired
@@ -58,10 +61,10 @@ class VerifyServiceTest {
             .sendMail(any(EmailSendDto.class));
 
         // when
-        boolean result = verifyService.sendSignUpVerifyEmail("abc");
+        VerificationCodeDto result = verifyService.sendSignUpVerifyEmail("abc");
 
         // then
-        assertThat(result).isTrue();
+        assertThat(result.getVerificationCode()).isNotNull();
     }
 
     @Test
@@ -89,5 +92,20 @@ class VerifyServiceTest {
             verifyService.approveVerificationEmail("123bd87b-c6bf-4e45-95c5-650ca76de779"))
             .isInstanceOf(EmailVerificationImpossibleException.class)
             .hasMessage("이메일 인증시간이 만료되거나, 검증이 불가능합니다.");
+    }
+
+    @Test
+    void removeVerificationCode() {
+        //given
+        SetOperations<String, String> setOperations = mock(SetOperations.class);
+        given(redisTemplate.opsForSet()).willReturn(setOperations);
+        given(setOperations.pop(anyString())).willReturn("false");
+        // 인증이 완료되면 false가 레디스에 들어가게됨
+
+        //when
+        boolean result =
+            verifyService.removeVerificationCode("123bd87b-c6bf-4e45-95c5-650ca76de779");
+
+        assertThat(result).isTrue();
     }
 }

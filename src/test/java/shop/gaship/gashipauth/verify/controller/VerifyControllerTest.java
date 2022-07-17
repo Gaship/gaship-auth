@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
 import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 import shop.gaship.gashipauth.verify.service.VerifyService;
@@ -45,13 +46,13 @@ class VerifyControllerTest {
     void requestEmailVerify() throws Exception {
         String testEmail = "example@nhn.com";
         given(verifyService.sendSignUpVerifyEmail(testEmail))
-            .willReturn(true);
+            .willReturn(new VerificationCodeDto("12341234"));
 
         mockMvc.perform(get("/securities/verify/email")
                 .param("address", testEmail))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.requestStatus").value("success"));
+            .andExpect(jsonPath("$.verificationCode").value("12341234"));
     }
 
     @Test
@@ -59,7 +60,7 @@ class VerifyControllerTest {
     void requestEmailVerifyFailure() throws Exception {
         String testEmail = "example@nhn.com";
         given(verifyService.sendSignUpVerifyEmail(testEmail))
-            .willReturn(false);
+            .willThrow(new EmailSendFailureException("인증 이메일 전송에 실패했습니다."));
 
         mockMvc.perform(get("/securities/verify/email")
                 .param("address", testEmail))
@@ -106,6 +107,38 @@ class VerifyControllerTest {
             .willThrow(new EmailVerificationImpossibleException());
 
         mockMvc.perform(get("/securities/verify/email/{verifyCode}", verifyCode))
+            .andExpect(status().is4xxClientError())
+            .andExpect(result ->
+                assertThat(result.getResolvedException().getClass()).isEqualTo(
+                    EmailVerificationImpossibleException.class))
+            .andExpect(jsonPath("$.message")
+                .value("이메일 인증시간이 만료되거나, 검증이 불가능합니다."));
+    }
+
+    @Test
+    @DisplayName("이메일 검증 확인 성공 : 이미 인증이 되었거나, 인증이 되지않 않는경우")
+    void alreadyVerifiedCheck() throws Exception {
+        String verifyCode = "easd-123-12312-1sdad";
+        given(verifyService.removeVerificationCode(verifyCode))
+            .willReturn(true);
+
+        mockMvc.perform(get("/securities/verify")
+                .param("verifyCode", verifyCode))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status")
+                .value(true));
+    }
+
+    @Test
+    @DisplayName("이메일 검증 확인 실패 : 이미 인증이 되었거나, 인증이 존재하지 않는경우")
+    void alreadyVerifiedCheckExceptionTest() throws Exception {
+        String verifyCode = "easd-123-12312-1sdad";
+        given(verifyService.removeVerificationCode(verifyCode))
+            .willThrow(new EmailVerificationImpossibleException());
+
+        mockMvc.perform(get("/securities/verify")
+                .param("verifyCode", verifyCode))
             .andExpect(status().is4xxClientError())
             .andExpect(result ->
                 assertThat(result.getResolvedException().getClass()).isEqualTo(

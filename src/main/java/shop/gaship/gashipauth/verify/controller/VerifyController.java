@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.gaship.gashipauth.util.dto.RequestSuccessDto;
-import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
+import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
+import shop.gaship.gashipauth.verify.dto.VerifiedCheckDto;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 import shop.gaship.gashipauth.verify.service.VerifyService;
 
@@ -32,19 +33,16 @@ public class VerifyController {
      * @return 요청에 성공했다는 응답을 알리기위한 dto객체입니다.
      */
     @GetMapping("/email")
-    public ResponseEntity<RequestSuccessDto> requestEmailVerify(@RequestParam String address) {
-        boolean isSend = verifyService.sendSignUpVerifyEmail(address);
+    public ResponseEntity<VerificationCodeDto> requestEmailVerify(@RequestParam String address) {
+        VerificationCodeDto verificationCode = verifyService.sendSignUpVerifyEmail(address);
 
-        if (!isSend) {
-            throw new EmailSendFailureException("서버의 오류로 인해 전송에 실패했습니다.");
-        }
-
-        return ResponseEntity.ok(new RequestSuccessDto());
+        return ResponseEntity.ok(verificationCode);
     }
 
     /**
      * 회원가입을 위한 이메일 주소인증을 승인하기 위한 컨트롤러입니다.
      *
+     * @throws EmailVerificationImpossibleException 이메일 전송실패 예외
      * @param verifyCode 회원에게 전송되었던 인증코드입니다.
      * @return 요청에 성공했다는 응답을 알리기위한 dto객체입니다.
      */
@@ -57,5 +55,20 @@ public class VerifyController {
         }
 
         return ResponseEntity.ok(new RequestSuccessDto());
+    }
+
+    /**
+     * 회원가입 이메일 주소인증의 결과를 확인하기위한 메서드입니다.
+     *
+     * @throws EmailVerificationImpossibleException 이메일 전송실패 예외
+     * @param verifyCode 회원에게 전송하였던 검증코드입니다.
+     * @return 검증결과가 담긴 객체를 응답합니다.
+     * @author 김민수
+     */
+    @GetMapping(params = "verifyCode")
+    public ResponseEntity<VerifiedCheckDto> alreadyVerifiedCheck(@RequestParam String verifyCode) {
+        boolean isVerified = verifyService.removeVerificationCode(verifyCode);
+
+        return ResponseEntity.ok(new VerifiedCheckDto(isVerified));
     }
 }

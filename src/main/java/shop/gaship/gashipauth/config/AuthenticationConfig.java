@@ -47,7 +47,7 @@ public class AuthenticationConfig {
             .uri("/keymanager/v1.0/appkey/{appKey}/secrets/{jwtKeypair}", appKey, jwtKeypair)
             .retrieve()
             .toEntity(SecureKeyResponse.class)
-            .timeout(Duration.ofSeconds(3))
+            .timeout(Duration.ofSeconds(5))
             .blockOptional()
             .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
             .getBody();
@@ -66,7 +66,7 @@ public class AuthenticationConfig {
             .uri("/keymanager/v1.0/appkey/{appKey}/secrets/{mailKeypair}", appKey, mailKeypair)
             .retrieve()
             .toEntity(SecureKeyResponse.class)
-            .timeout(Duration.ofSeconds(3))
+            .timeout(Duration.ofSeconds(5))
             .blockOptional()
             .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
             .getBody()
