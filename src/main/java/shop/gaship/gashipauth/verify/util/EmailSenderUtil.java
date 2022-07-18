@@ -2,10 +2,11 @@ package shop.gaship.gashipauth.verify.util;
 
 import java.util.List;
 import java.util.Objects;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipauth.config.NotificationConfig;
+import shop.gaship.gashipauth.config.SecureManagerConfig;
 import shop.gaship.gashipauth.exceptions.NoResponseDataException;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 import shop.gaship.gashipauth.verify.dto.EmailSendSuccessfulDto;
@@ -18,12 +19,18 @@ import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
  * @since 1.0
  */
 @Component
-@AllArgsConstructor
 public class EmailSenderUtil {
     private static final String ERROR_MESSAGE = "요청 수행에 실패했습니다.";
     private final String mailBaseurl;
     private final String mailSenderSecretKey;
     private final String mailAppKey;
+
+    public EmailSenderUtil(SecureManagerConfig secureManagerConfig,
+                           NotificationConfig notificationConfig) {
+        this.mailBaseurl = notificationConfig.getUrl();
+        this.mailAppKey = notificationConfig.getAppkey();
+        this.mailSenderSecretKey = secureManagerConfig.mailSenderSecretKey();
+    }
 
     /**
      * 이메일을 전송합니다.

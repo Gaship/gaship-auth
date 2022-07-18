@@ -1,7 +1,6 @@
 package shop.gaship.gashipauth.verify.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doNothing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,10 +10,12 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import shop.gaship.gashipauth.config.AuthenticationConfig;
+import shop.gaship.gashipauth.config.SecureManagerConfig;
 import shop.gaship.gashipauth.verify.dto.EmailReceiver;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 
@@ -29,9 +30,7 @@ import shop.gaship.gashipauth.verify.dto.EmailSendDto;
  * ----------------------------------------------------------- <br/>
  * 2022/07/12 김민수 최초 생성 <br/>
  */
-@ExtendWith({ SpringExtension.class })
-@PropertySource("classpath:application-dev.properties")
-@Import({ EmailSenderUtil.class, AuthenticationConfig.class })
+@SpringBootTest
 class EmailSenderUtilTest {
 
     @Autowired

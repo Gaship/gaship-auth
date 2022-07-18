@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import shop.gaship.gashipauth.config.ServerConfig;
 import shop.gaship.gashipauth.verify.dto.EmailReceiver;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
@@ -22,13 +22,19 @@ import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
  * @since 1.0
  */
 @Service
-@RequiredArgsConstructor
 public class VerifyServiceImpl implements VerifyService {
     private static final String TEMPLATE_ID = "signUpTemplate";
 
-    private final String gashipFrontServerUrl;
+    private final String frontUrl;
     private final EmailSenderUtil emailSenderUtil;
     private final RedisTemplate<String, String> redisTemplate;
+
+    public VerifyServiceImpl(ServerConfig serverConfig, EmailSenderUtil emailSenderUtil,
+                             RedisTemplate<String, String> redisTemplate) {
+        this.frontUrl = serverConfig.getFrontUrl();
+        this.emailSenderUtil = emailSenderUtil;
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public VerificationCodeDto sendSignUpVerifyEmail(String receiverEmail) {
@@ -38,7 +44,7 @@ public class VerifyServiceImpl implements VerifyService {
 
         // 해당 url은 프론트 서버를 의미한다.
         Map<String, String> templateParam =
-            Map.of("link", gashipFrontServerUrl + "/members/signUp/email-verify/" + verifyCode);
+            Map.of("link", frontUrl + "/members/signUp/email-verify/" + verifyCode);
         String receiveType = "MRT0";
 
         EmailSendDto emailSendDto = EmailSendDto.builder()

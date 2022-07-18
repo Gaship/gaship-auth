@@ -1,10 +1,9 @@
 package shop.gaship.gashipauth.config;
 
 import org.springframework.beans.factory.BeanClassLoaderAware;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -13,31 +12,18 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * packageName    : shop.gaship.gashipauth.config <br/>
- * fileName       : RedisConfig <br/>
- * author         : 최겸준 <br/>
- * date           : 2022/07/15 <br/>
- * description    : 레디스의 연결 설정등을 하는 클래스입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/15           최겸준               최초 생성                         <br/>
+ * 레디스의 연결 설정등을 하는 클래스입니다.
+ *
+ * @author 최겸준
+ * @since 1.0
  */
 @Configuration
-@PropertySource("classpath:redis.properties")
+@ConfigurationProperties(prefix = "redis")
 public class RedisConfig implements BeanClassLoaderAware {
-    @Value("${redis.host}")
     private String host;
-
-    @Value("${redis.port}")
     private int port;
-
-    @Value("${redis.password}")
     private String password;
-
-    @Value("${redis.database}")
     private int database;
-
     private ClassLoader classLoader;
 
     @Bean
@@ -67,5 +53,41 @@ public class RedisConfig implements BeanClassLoaderAware {
     @Override
     public void setBeanClassLoader(ClassLoader classLoader) {
         this.classLoader = classLoader;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getDatabase() {
+        return database;
+    }
+
+    public ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDatabase(int database) {
+        this.database = database;
     }
 }

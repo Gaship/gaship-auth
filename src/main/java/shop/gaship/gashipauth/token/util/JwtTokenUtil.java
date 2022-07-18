@@ -9,8 +9,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import shop.gaship.gashipauth.config.SecureManagerConfig;
 import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 /**
@@ -21,14 +21,17 @@ import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
  * @since 1.0
  */
 @Component
-@RequiredArgsConstructor
 public class JwtTokenUtil {
     private static final long THIRTY_MINUTE_AT_MILLI_SEC = 1_800_000L;
     private static final long ONE_MONTH_AT_MILLI_SEC = 2_629_700_000L;
     public static final long  REDIS_EXPIRE_MAX_SECOND = THIRTY_MINUTE_AT_MILLI_SEC;
     public static final long CLIENT_EXPIRE_MAX_SECOND = ONE_MONTH_AT_MILLI_SEC;
 
-    private final Key createKey;
+    private final Key tokenKey;
+
+    public JwtTokenUtil(SecureManagerConfig secureManagerConfig) {
+        this.tokenKey = secureManagerConfig.tokenKey();
+    }
 
     /**
      * 사용자에게 부여 할 access token입니다.
@@ -68,7 +71,7 @@ public class JwtTokenUtil {
         return Jwts.builder()
             .setHeader(header)
             .setClaims(payload)
-            .signWith(createKey)
+            .signWith(tokenKey)
             .setExpiration(Timestamp.valueOf(accessTokenExpireDate))
             .compact();
     }
