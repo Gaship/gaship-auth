@@ -42,7 +42,7 @@ public class SecureManagerConfig {
         return findSecretDataFromSecureKeyManager(emailNotificationKey);
     }
 
-    private String findSecretDataFromSecureKeyManager(String keyId){
+    String findSecretDataFromSecureKeyManager(String keyId){
         return Objects.requireNonNull(WebClient.create(url).get()
                 .uri("/keymanager/v1.0/appkey/{appkey}/secrets/{keyid}", appKey, keyId)
                 .retrieve()

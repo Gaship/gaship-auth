@@ -27,11 +27,14 @@ public class RedisConfig implements BeanClassLoaderAware {
     private ClassLoader classLoader;
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    public RedisConnectionFactory redisConnectionFactory(SecureManagerConfig secureManagerConfig) {
+        String secretHost = secureManagerConfig.findSecretDataFromSecureKeyManager(host);
+        String secretPassword = secureManagerConfig.findSecretDataFromSecureKeyManager(password);
+
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName(host);
+        configuration.setHostName(secretHost);
         configuration.setPort(port);
-        configuration.setPassword(password);
+        configuration.setPassword(secretPassword);
         configuration.setDatabase(database);
 
         return new LettuceConnectionFactory(configuration);
@@ -40,7 +43,7 @@ public class RedisConfig implements BeanClassLoaderAware {
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setConnectionFactory(redisConnectionFactory(null));
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
