@@ -1,10 +1,8 @@
 package shop.gaship.gashipauth.config;
 
-import org.springframework.beans.factory.BeanClassLoaderAware;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -12,48 +10,91 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * Redis와 관련된 설정을 위한 class 입니다.
+ *
+ * @author 조재철
+ * @since 1.0
+ */
 @Configuration
-public class RedisConfig implements BeanClassLoaderAware {
-    @Value("${redis.host}")
+@ConfigurationProperties(prefix = "redis")
+public class RedisConfig {
+
     private String host;
 
-    @Value("${redis.port}")
     private int port;
 
-    @Value("${redis.password}")
     private String password;
 
-    @Value("${redis.database}")
     private int database;
 
-    private ClassLoader classLoader;
+    public String getHost() {
+        return host;
+    }
 
+    public int getPort() {
+        return port;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getDatabase() {
+        return database;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDatabase(int database) {
+        this.database = database;
+    }
+
+    /**
+     * redis 연동을 위한 연결 설정을 한 Lettuce를 반환하는 빈등록 하는 메서드. (Redis Client로 Lettuce를 사용)
+     *
+     * @param authenticationConfig
+     * @return
+     */
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    public RedisConnectionFactory redisConnectionFactory(
+        AuthenticationConfig authenticationConfig) {
+        String secretHost = authenticationConfig.findSecretDataFromSecureKeyManager(host);
+        String secretPassword = authenticationConfig.findSecretDataFromSecureKeyManager(password);
+
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName(host);
+        configuration.setHostName(secretHost);
         configuration.setPort(port);
-        configuration.setPassword(password);
+        configuration.setPassword(secretPassword);
         configuration.setDatabase(database);
 
         return new LettuceConnectionFactory(configuration);
     }
 
+    /**
+     * RedisTemplate 관련 설정을 하여 빈 등록하는 메서드이다.
+     *
+     * @return
+     */
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setConnectionFactory(redisConnectionFactory(null));
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-        
+
         return redisTemplate;
-    }
-
-
-    @Override
-    public void setBeanClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
     }
 }

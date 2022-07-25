@@ -1,52 +1,86 @@
 package shop.gaship.gashipauth.auth.service.impl;
 
-import java.util.Date;
+import java.time.ZoneId;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipauth.auth.dto.Response;
+import shop.gaship.gashipauth.auth.exception.NotFoundRefreshTokenException;
 import shop.gaship.gashipauth.auth.service.AuthService;
+import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
+import shop.gaship.gashipauth.token.dto.response.JwtResponseDto;
 import shop.gaship.gashipauth.token.util.JwtTokenUtil;
 
 /**
- * packageName    : shop.gaship.gashipauth.token.service.impl fileName       : AuthServiceImpl
- * author         : jo date           : 2022/07/12 description    : ===========================================================
- * DATE              AUTHOR             NOTE -----------------------------------------------------------
- * 2022/07/12        jo       최초 생성
+ * Auth 관련 비즈니스 로직 처리를 하는 클래스.
+ *
+ * @author : 조재철
+ * @since 1.0
  */
 @RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final JwtTokenUtil jwtTokenUtil;
-    private final Response response;
     private final RedisTemplate redisTemplate;
 
-
+    /**
+     * logout 관련 비즈니스 로직을 처리하는 메서드. logout시 accessToken을 Redis에 blackList로 저장, 기존 Redis에 있는
+     * RefreshToken 삭제
+     *
+     * @param accessToken
+     * @param refreshToken
+     * @param memberNo
+     * @return
+     */
     @Override
-    public ResponseEntity<?> logout(String token) {
-        if (!jwtTokenUtil.validateToken(token)) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> logout(String accessToken, String refreshToken, Integer memberNo) {
+
+        if (redisTemplate.opsForValue().get("RT " + memberNo) != null
+            && redisTemplate.opsForValue().get("RT " + memberNo).equals(refreshToken)) {
+            redisTemplate.delete("RT " + memberNo);
+        } else {
+            throw new NotFoundRefreshTokenException("해당 Refresh Token을 찾을 수 없습니다.");
         }
-
-        // 2. Access Token 에서 User email 을 가져옵니다.
-        String email = jwtTokenUtil.getEmail(token);
-
-        // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
-        if (redisTemplate.opsForValue().get("RT:" + email) != null) {
-            // Refresh Token 삭제
-            redisTemplate.delete("RT:" + email);
-        }
-
-        // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
-        Long expiration = new Date().getTime() - jwtTokenUtil.getExpiredDate(token).getTime();
 
         redisTemplate.opsForValue()
-            .set(token, "logout", expiration, TimeUnit.MILLISECONDS);
+            .set(accessToken, "logout", jwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC,
+                TimeUnit.MILLISECONDS);
 
-        return response.success();
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * Jwt 발급 받는 비즈니스 로직을 처리하는 메서드 (Refresh Token 한달, AccessToken 30분 만료기간)
+     *
+     * @param userInfoDto
+     * @return
+     */
+    @Override
+    public ResponseEntity<?> issueJwt(UserInfoForJwtRequestDto userInfoDto) {
+
+        Integer userNo = userInfoDto.getMemberNo();
+
+        String refreshToken = jwtTokenUtil.createRefreshToken(userInfoDto);
+        String accessToken = jwtTokenUtil.createAccessToken(userInfoDto);
+
+        JwtResponseDto jwtTokenDto = new JwtResponseDto();
+
+        jwtTokenDto.setRefreshToken(refreshToken);
+        jwtTokenDto.setAccessToken(accessToken);
+        jwtTokenDto.setRefreshTokenExpireDateTime(
+            jwtTokenUtil.getExpireDate(jwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
+                ZoneId.systemDefault()).toLocalDateTime());
+        jwtTokenDto.setAccessTokenExpireDateTime(
+            jwtTokenUtil.getExpireDate(jwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime());
+
+        redisTemplate.opsForValue()
+            .set("RT " + userNo, refreshToken, jwtTokenUtil.ONE_MONTH_AT_MILLI_SEC,
+                TimeUnit.MILLISECONDS);
+
+        return ResponseEntity.ok(jwtTokenDto);
     }
 }

@@ -1,17 +1,11 @@
 package shop.gaship.gashipauth.token.exceptions;
 
 /**
- * packageName    : shop.gaship.gashipauth.exceptions
- * fileName       : NoResponseDataException
- * author         : oct_sky_out
- * date           : 2022/07/09
- * description    :
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 2022/07/09        oct_sky_out       최초 생성
+ * @author : 조재철
+ * @since 1.0
  */
 public class NoResponseDataException extends RuntimeException {
+
     public NoResponseDataException(String message) {
         super(message);
     }

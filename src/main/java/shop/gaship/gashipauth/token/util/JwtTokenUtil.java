@@ -1,53 +1,58 @@
 package shop.gaship.gashipauth.token.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
 
+/**
+ * Jwt 토큰 생성에 관한 유틸 클래스.
+ *
+ * @author : 조재철
+ * @since 1.0
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtil {
-    private static final long THIRTY_MINUTE_AT_MILLI_SEC = 1_800_000L;
-    private static final long ONE_MONTH_AT_MILLI_SEC = 2_629_700_000L;
-    public static final long  REDIS_EXPIRE_MAX_SECOND = THIRTY_MINUTE_AT_MILLI_SEC;
-    public static final long CLIENT_EXPIRE_MAX_SECOND = ONE_MONTH_AT_MILLI_SEC;
+
+    public static final long THIRTY_MINUTE_AT_MILLI_SEC = 1_800_000L;
+
+    public static final long ONE_MONTH_AT_MILLI_SEC = 2_629_700_000L;
 
     private final Key createKey;
 
     /**
-     * methodName : generateAccessToken
-     * author : 김민수
-     * description : 사용자에게 부여 할 access token입니다.
+     * AccessToken을 만드는 메서드.
      *
-     * @param userDetails : 사용자 인증 정보
-     * @return string
+     * @param userDetails
+     * @return
      */
-    public String createAccessToken(SignInSuccessUserDetailsDto userDetails) {
+    public String createAccessToken(UserInfoForJwtRequestDto userDetails) {
         return getToken(userDetails, THIRTY_MINUTE_AT_MILLI_SEC);
     }
 
     /**
-     * methodName : generateRefreshToken
-     * author : 김민수
-     * description : 사용자에게 부여 할 refresh token입니다.
+     * RefreshToken을 만드는 메서드.
      *
-     * @param userDetails : 사용자 인증 정보
-     * @return string
+     * @param userDetails
+     * @return
      */
-    public String createRefreshToken(SignInSuccessUserDetailsDto userDetails) {
+    public String createRefreshToken(UserInfoForJwtRequestDto userDetails) {
         return getToken(userDetails, ONE_MONTH_AT_MILLI_SEC);
     }
 
-    private String getToken(SignInSuccessUserDetailsDto userDetails, long seconds) {
+    /**
+     * header, payload, signature를 만들어 jwt token을 만드는 메서드.
+     *
+     * @param userDetails
+     * @param seconds
+     * @return
+     */
+    private String getToken(UserInfoForJwtRequestDto userDetails, long seconds) {
         Map<String, Object> header = makeJwtHeader();
         Date accessTokenExpireDate = getExpireDate(seconds);
         Map<String, Object> payload = makeJwtPayload(userDetails, accessTokenExpireDate.getTime());
@@ -60,11 +65,17 @@ public class JwtTokenUtil {
             .compact();
     }
 
-
-    private Map<String, Object> makeJwtPayload(SignInSuccessUserDetailsDto userDetails, long expireTime) {
+    /**
+     * jwt의 payload를 만드는 메서드
+     *
+     * @param userDetails
+     * @param expireTime
+     * @return
+     */
+    private Map<String, Object> makeJwtPayload(UserInfoForJwtRequestDto userDetails,
+        long expireTime) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", userDetails.getIdentifyNo());
-        claims.put("email", userDetails.getEmail());
+        claims.put("id", userDetails.getMemberNo());
         claims.put("role", userDetails.getAuthorities());
         claims.put("createAt", new Date().getTime());
         claims.put("expireAt", expireTime);
@@ -72,6 +83,11 @@ public class JwtTokenUtil {
         return claims;
     }
 
+    /**
+     * jwt의 header를 만드는 메서드
+     *
+     * @return
+     */
     private Map<String, Object> makeJwtHeader() {
         Map<String, Object> headerMap = new HashMap<>();
         headerMap.put("typ", "JWT");
@@ -80,35 +96,17 @@ public class JwtTokenUtil {
         return headerMap;
     }
 
-    private Date getExpireDate(long seconds) { // FIXME : 메서드 이름이 set이 되는게 맞지 않을까?
+    /**
+     * jwt 인증 만료기간을 만드는 메서드
+     *
+     * @param seconds
+     * @return
+     */
+    public Date getExpireDate(long seconds) {
         Date expireTime = new Date();
         expireTime.setTime(expireTime.getTime() + seconds);
 
         return expireTime;
     }
 
-    public Date getExpiredDate(String token) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey(createKey).parseClaimsJws(token);
-
-        return claims.getBody().getExpiration();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(createKey).parseClaimsJws(token);
-
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public String getEmail(String token) {
-        return Jwts.parser().setSigningKey(createKey).parseClaimsJws(token).getBody()
-            .getSubject();
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
-    }
 }
