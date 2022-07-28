@@ -3,7 +3,6 @@ package shop.gaship.gashipauth.verify.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -11,7 +10,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 import shop.gaship.gashipauth.verify.service.impl.VerifyServiceImpl;
-import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
+import shop.gaship.gashipauth.util.EmailSenderUtil;
 
 /**
  * packageName    : shop.gaship.gashipauth.verify.service <br/>

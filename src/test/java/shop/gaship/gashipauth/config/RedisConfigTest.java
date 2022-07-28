@@ -16,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @since 1.0
  */
 @ExtendWith({SpringExtension.class})
-@EnableConfigurationProperties(value = {RedisConfig.class})
+@EnableConfigurationProperties(value = {RedisConfig.class, SecureManagerConfig.class})
 @TestPropertySource("classpath:application.properties")
 class RedisConfigTest {
     @Autowired

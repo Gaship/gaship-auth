@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +47,7 @@ public class VerifyController {
      * @param verifyCode 회원에게 전송되었던 인증코드입니다.
      * @return 요청에 성공했다는 응답을 알리기위한 dto객체입니다.
      */
-    @GetMapping("/email/{verifyCode}")
+    @PutMapping("/email/{verifyCode}")
     public ResponseEntity<RequestSuccessDto> verifyEmail(@PathVariable String verifyCode) {
         boolean isVerified = verifyService.approveVerificationEmail(verifyCode);
 
@@ -60,13 +61,13 @@ public class VerifyController {
     /**
      * 회원가입 이메일 주소인증의 결과를 확인하기위한 메서드입니다.
      *
-     * @throws EmailVerificationImpossibleException 이메일 전송실패 예외
      * @param verifyCode 회원에게 전송하였던 검증코드입니다.
      * @return 검증결과가 담긴 객체를 응답합니다.
+     * @throws EmailVerificationImpossibleException 이메일 전송실패 예외
      * @author 김민수
      */
-    @GetMapping(params = "verifyCode")
-    public ResponseEntity<VerifiedCheckDto> alreadyVerifiedCheck(@RequestParam String verifyCode) {
+    @GetMapping("/email/{verifyCode}")
+    public ResponseEntity<VerifiedCheckDto> alreadyVerifiedCheck(@PathVariable String verifyCode) {
         boolean isVerified = verifyService.removeVerificationCode(verifyCode);
 
         return ResponseEntity.ok(new VerifiedCheckDto(isVerified));
