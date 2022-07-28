@@ -1,4 +1,4 @@
-package shop.gaship.gashipauth.message;
+package shop.gaship.gashipauth.exceptions;
 
 /**
  *

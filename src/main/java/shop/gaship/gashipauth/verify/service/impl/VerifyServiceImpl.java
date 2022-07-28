@@ -13,7 +13,7 @@ import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 import shop.gaship.gashipauth.verify.service.VerifyService;
-import shop.gaship.gashipauth.verify.util.EmailSenderUtil;
+import shop.gaship.gashipauth.util.EmailSenderUtil;
 
 /**
  * 검증을 위한 VerifyService의 구현 클래스입니다.

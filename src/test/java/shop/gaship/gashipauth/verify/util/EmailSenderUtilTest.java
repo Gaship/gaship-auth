@@ -7,15 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import shop.gaship.gashipauth.config.SecureManagerConfig;
+import shop.gaship.gashipauth.util.EmailSenderUtil;
 import shop.gaship.gashipauth.verify.dto.EmailReceiver;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 
@@ -31,6 +28,7 @@ import shop.gaship.gashipauth.verify.dto.EmailSendDto;
  * 2022/07/12 김민수 최초 생성 <br/>
  */
 @SpringBootTest
+@Import(EmailSenderUtil.class)
 class EmailSenderUtilTest {
 
     @Autowired
@@ -51,6 +49,6 @@ class EmailSenderUtilTest {
 
         emailSenderUtil.sendMail(emailSendDto);
 
-        assertThat(true).isTrue();
+        assertThat(Optional.of(true)).isPresent();
     }
 }

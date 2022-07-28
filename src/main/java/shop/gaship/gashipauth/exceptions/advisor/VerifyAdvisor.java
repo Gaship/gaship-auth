@@ -1,13 +1,10 @@
-package shop.gaship.gashipauth.verify.advisor;
+package shop.gaship.gashipauth.exceptions.advisor;
 
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import shop.gaship.gashipauth.message.ErrorResponse;
+import shop.gaship.gashipauth.exceptions.ErrorResponse;
 import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 

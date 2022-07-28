@@ -1,4 +1,4 @@
-package shop.gaship.gashipauth.verify.util;
+package shop.gaship.gashipauth.util;
 
 import java.util.List;
 import java.util.Objects;
