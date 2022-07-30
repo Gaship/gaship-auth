@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "gaship-server")
 public class ServerConfig {
     private String frontUrl;
-    private String authUrl;
+    private String shoppingMallUrl;
     private String paymentsUrl;
     private String schedulerUrl;
 
@@ -22,8 +22,8 @@ public class ServerConfig {
         return frontUrl;
     }
 
-    public String getAuthUrl() {
-        return authUrl;
+    public String getShoppingMallUrl() {
+        return shoppingMallUrl;
     }
 
     public String getPaymentsUrl() {
@@ -38,8 +38,8 @@ public class ServerConfig {
         this.frontUrl = frontUrl;
     }
 
-    public void setAuthUrl(String authUrl) {
-        this.authUrl = authUrl;
+    public void setShoppingMallUrl(String shoppingMallUrl) {
+        this.shoppingMallUrl = shoppingMallUrl;
     }
 
     public void setPaymentsUrl(String paymentsUrl) {
