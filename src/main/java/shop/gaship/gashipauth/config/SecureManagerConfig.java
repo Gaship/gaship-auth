@@ -1,7 +1,6 @@
 package shop.gaship.gashipauth.config;
 
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.Key;
 import java.security.KeyManagementException;
@@ -20,8 +19,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestTemplate;
 import shop.gaship.gashipauth.exceptions.NoResponseDataException;
 import shop.gaship.gashipauth.util.dto.SecureKeyResponse;
@@ -61,7 +60,7 @@ public class SecureManagerConfig {
         try {
             KeyStore clientStore = KeyStore.getInstance("PKCS12");
             clientStore.load(
-                new FileInputStream(ResourceUtils.getFile("classpath:github-action.p12")),
+                new ClassPathResource("github-action.p12").getInputStream(),
                 localKey.toCharArray());
 
             SSLContextBuilder sslContextBuilder = new SSLContextBuilder();
