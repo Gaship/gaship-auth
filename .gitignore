@@ -196,3 +196,6 @@ $RECYCLE.BIN/
 .idea
 src/main/resources/redis.properties
 src/main/resources/jwt.properties
+
+# development environment logging
+/log
