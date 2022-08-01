@@ -28,9 +28,9 @@ public class AuthController {
     /**
      * /logout 요청을 받아서 로그아웃 관련 응답을 하는 메서드.
      *
-     * @param memberNo
-     * @param request
-     * @return
+     * @param memberNo member의 number.
+     * @param request HTTP 서블릿에 대한 요청 정보.
+     * @return logout이 되었는지 응답 반환.
      */
     @PostMapping(value = "/logout")
     public ResponseEntity<?> logout(@RequestBody Integer memberNo, HttpServletRequest request) {
@@ -42,8 +42,8 @@ public class AuthController {
     /**
      * /issue-token 요청을 받아서 jwt 토큰을 반환하는 클래스.
      *
-     * @param userInfoDto
-     * @return
+     * @param userInfoDto 회원 정보(회원 번호, 권한).
+     * @return 토큰이 재발급 되었는지 응답 반환.
      */
     @PostMapping(value = "/issue-token")
     public ResponseEntity<?> issueJwt(@RequestBody UserInfoForJwtRequestDto userInfoDto) {

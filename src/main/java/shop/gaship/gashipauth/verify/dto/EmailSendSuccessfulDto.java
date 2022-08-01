@@ -26,12 +26,12 @@ public class EmailSendSuccessfulDto {
         private Data data;
 
         @Getter
-        public static class Data{
+        public static class Data {
             private String requestId;
             private List<EmailSendResult> results;
 
             @Getter
-            public static class EmailSendResult{
+            public static class EmailSendResult {
                 private String receiveMailAddr;
                 private String receiveName;
                 private String receiveType;

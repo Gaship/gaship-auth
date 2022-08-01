@@ -27,36 +27,37 @@ public class AuthServiceImpl implements AuthService {
     private final RedisTemplate redisTemplate;
 
     /**
-     * logout 관련 비즈니스 로직을 처리하는 메서드. logout시 accessToken을 Redis에 blackList로 저장, 기존 Redis에 있는
-     * RefreshToken 삭제
+     * logout 관련 비즈니스 로직을 처리하는 메서드. logout시 accessToken을
+     * Redis에 blackList로 저장, 기존 Redis에 있는 RefreshToken 삭제.
      *
-     * @param accessToken
-     * @param refreshToken
-     * @param memberNo
-     * @return
+     * @param accessToken  인증 정보 access token.
+     * @param refreshToken 인증 정보 refresh token.
+     * @param memberNo     회원 번호.
+     * @return 로그아웃 응답 정보 반환.
      */
     @Override
     public ResponseEntity<?> logout(String accessToken, String refreshToken, Integer memberNo) {
 
-        if (redisTemplate.opsForValue().get("RT " + memberNo) != null
-            && redisTemplate.opsForValue().get("RT " + memberNo).equals(refreshToken)) {
+        String token = (String) redisTemplate.opsForValue().get("RT " + memberNo);
+
+        if (refreshToken.equals(token)) {
             redisTemplate.delete("RT " + memberNo);
         } else {
             throw new NotFoundRefreshTokenException("해당 Refresh Token을 찾을 수 없습니다.");
         }
 
         redisTemplate.opsForValue()
-            .set(accessToken, "logout", jwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC,
-                TimeUnit.MILLISECONDS);
+                     .set(accessToken, "logout", JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC,
+                         TimeUnit.MILLISECONDS);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     /**
-     * Jwt 발급 받는 비즈니스 로직을 처리하는 메서드 (Refresh Token 한달, AccessToken 30분 만료기간)
+     * Jwt 발급 받는 비즈니스 로직을 처리하는 메서드 (Refresh Token 한달, AccessToken 30분 만료기간).
      *
-     * @param userInfoDto
-     * @return
+     * @param userInfoDto 회원 정보(회원 번호, 권한).
+     * @return 토큰 재발급에 대한 응답 반환.
      */
     @Override
     public ResponseEntity<?> issueJwt(UserInfoForJwtRequestDto userInfoDto) {
@@ -71,15 +72,15 @@ public class AuthServiceImpl implements AuthService {
         jwtTokenDto.setRefreshToken(refreshToken);
         jwtTokenDto.setAccessToken(accessToken);
         jwtTokenDto.setRefreshTokenExpireDateTime(
-            jwtTokenUtil.getExpireDate(jwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
+            jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
                 ZoneId.systemDefault()).toLocalDateTime());
         jwtTokenDto.setAccessTokenExpireDateTime(
-            jwtTokenUtil.getExpireDate(jwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDateTime());
+            jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDateTime());
 
         redisTemplate.opsForValue()
-            .set("RT " + userNo, refreshToken, jwtTokenUtil.ONE_MONTH_AT_MILLI_SEC,
-                TimeUnit.MILLISECONDS);
+                     .set("RT " + userNo, refreshToken, JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC,
+                         TimeUnit.MILLISECONDS);
 
         return ResponseEntity.ok(jwtTokenDto);
     }

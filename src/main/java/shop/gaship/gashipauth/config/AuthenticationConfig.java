@@ -56,7 +56,7 @@ public class AuthenticationConfig {
     /**
      * secure key를 얻어온 후 Base64로 인코딩 한 것, HS256 알고리즘을 가지는 SecretKeySpec 객체를 반환하는 빈을 등록하는 메서드.
      *
-     * @return
+     * @return secret key 반환.
      */
     @Bean
     public Key tokenKey() {
@@ -71,8 +71,8 @@ public class AuthenticationConfig {
     /**
      * nhn cloud key manager에 secure key를 얻기 위한 메서드.
      *
-     * @param keyId
-     * @return
+     * @param keyId secret key를 얻기 위한 key id.
+     * @return nhn cloud key manage가 관리하는 secret key를 반환.
      */
     String findSecretDataFromSecureKeyManager(String keyId) {
         String errorMessage = "응답 결과가 없습니다.";

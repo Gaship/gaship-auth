@@ -19,12 +19,12 @@ public class ErrorController {
     /**
      * NotFoundRefreshTokenException 예외를 처리하는 메서드.
      *
-     * @param e
-     * @return
+     * @param e refresh tokend을 찾지 못했을때 에러.
+     * @return refreshtoken을 찾지 못하였을때 응답 반환.
      */
     @ExceptionHandler(NotFoundRefreshTokenException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundRefreshTokenException(
-        NotFoundRefreshTokenException e) {
+            NotFoundRefreshTokenException e) {
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)

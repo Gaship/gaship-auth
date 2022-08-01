@@ -21,9 +21,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration {
 
     /**
-     * Swagger 설정의 핵심으로 문서화 객체를 빈으로 등록하는 메서드
+     * Swagger 설정의 핵심으로 문서화 객체를 빈으로 등록하는 메서드.
      *
-     * @return
+     * @return Api 문서화 객체 반환.
      */
     @Bean
     public Docket api() {
@@ -36,9 +36,9 @@ public class SwaggerConfiguration {
     }
 
     /**
-     * Swagger API 문서에 대한 설명을 표기하는 메소드
+     * Swagger API 문서에 대한 설명을 표기하는 메소드.
      *
-     * @return
+     * @return 해당 Api 설명 정보 반환.
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
