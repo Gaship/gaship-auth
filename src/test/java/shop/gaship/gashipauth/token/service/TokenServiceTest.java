@@ -11,9 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipauth.token.dto.JwtTokenDto;
+import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
 import shop.gaship.gashipauth.token.service.impl.TokenServiceImpl;
 import shop.gaship.gashipauth.token.util.JwtTokenUtil;
-import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 /**
  * packageName    : shop.gaship.gashipauth.token.service <br/>
@@ -39,7 +39,7 @@ class TokenServiceTest {
     @Test
     void createToken() {
         // given
-        SignInSuccessUserDetailsDto userDetailsDto =  new SignInSuccessUserDetailsDto();
+        UserInfoForJwtRequestDto userDetailsDto =  new UserInfoForJwtRequestDto();
         String tmpAccessToken = "jfasdkljfaskljfa;jkdfkasl;jfa;fjkasdl";
         String tmpRefreshToken = "hjsdfkajkfshf8r_wef8eyqeruidasdassdasdas";
 

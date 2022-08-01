@@ -1,6 +1,5 @@
 package shop.gaship.gashipauth.config;
 
-import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,51 +11,22 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * 레디스의 연결 설정등을 하는 클래스입니다.
+ * Redis와 관련된 설정을 위한 class 입니다.
  *
- * @author 최겸준
+ * @author 조재철
  * @since 1.0
  */
 @Configuration
 @ConfigurationProperties(prefix = "redis")
-public class RedisConfig implements BeanClassLoaderAware {
+public class RedisConfig {
+
     private String host;
+
     private int port;
+
     private String password;
+
     private int database;
-    private ClassLoader classLoader;
-
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory(SecureManagerConfig secureManagerConfig) {
-        String secretHost = secureManagerConfig.findSecretDataFromSecureKeyManager(host);
-        String secretPassword = secureManagerConfig.findSecretDataFromSecureKeyManager(password);
-
-        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName(secretHost);
-        configuration.setPort(port);
-        configuration.setPassword(secretPassword);
-        configuration.setDatabase(database);
-
-        return new LettuceConnectionFactory(configuration);
-    }
-
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate() {
-        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory(null));
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-        
-        return redisTemplate;
-    }
-
-
-    @Override
-    public void setBeanClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
-    }
 
     public String getHost() {
         return host;
@@ -74,10 +44,6 @@ public class RedisConfig implements BeanClassLoaderAware {
         return database;
     }
 
-    public ClassLoader getClassLoader() {
-        return classLoader;
-    }
-
     public void setHost(String host) {
         this.host = host;
     }
@@ -92,5 +58,43 @@ public class RedisConfig implements BeanClassLoaderAware {
 
     public void setDatabase(int database) {
         this.database = database;
+    }
+
+    /**
+     * redis 연동을 위한 연결 설정을 한 Lettuce를 반환하는 빈등록 하는 메서드. (Redis Client로 Lettuce를 사용)
+     *
+     * @param authenticationConfig
+     * @return
+     */
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory(
+        AuthenticationConfig authenticationConfig) {
+        String secretHost = authenticationConfig.findSecretDataFromSecureKeyManager(host);
+        String secretPassword = authenticationConfig.findSecretDataFromSecureKeyManager(password);
+
+        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+        configuration.setHostName(secretHost);
+        configuration.setPort(port);
+        configuration.setPassword(secretPassword);
+        configuration.setDatabase(database);
+
+        return new LettuceConnectionFactory(configuration);
+    }
+
+    /**
+     * RedisTemplate 관련 설정을 하여 빈 등록하는 메서드이다.
+     *
+     * @return
+     */
+    @Bean
+    public RedisTemplate<?, ?> redisTemplate() {
+        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory(null));
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        return redisTemplate;
     }
 }

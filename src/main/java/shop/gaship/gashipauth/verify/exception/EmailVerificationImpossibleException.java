@@ -8,6 +8,7 @@ package shop.gaship.gashipauth.verify.exception;
  */
 public class EmailVerificationImpossibleException extends RuntimeException {
     private static final String MESSAGE = "이메일 인증시간이 만료되거나, 검증이 불가능합니다.";
+
     public EmailVerificationImpossibleException() {
         super(MESSAGE);
     }

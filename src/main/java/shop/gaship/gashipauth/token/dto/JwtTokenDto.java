@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- *
  * jwt토큰을 담는 클래스입니다.
  *
  * @author : 김민수

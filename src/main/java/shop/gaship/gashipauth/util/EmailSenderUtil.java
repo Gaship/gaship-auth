@@ -13,20 +13,21 @@ import shop.gaship.gashipauth.verify.dto.EmailSendSuccessfulDto;
 import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
 
 /**
- * 이메일을 전송하기위한 유틸형 클래스입니다
+ * 이메일을 전송하기위한 유틸형 클래스입니다.
  *
  * @author : 김민수
  * @since 1.0
  */
 @Component
 public class EmailSenderUtil {
+
     private static final String ERROR_MESSAGE = "요청 수행에 실패했습니다.";
     private final String mailBaseurl;
     private final String mailSenderSecretKey;
     private final String mailAppKey;
 
     public EmailSenderUtil(SecureManagerConfig secureManagerConfig,
-                           NotificationConfig notificationConfig) {
+        NotificationConfig notificationConfig) {
         this.mailBaseurl = notificationConfig.getUrl();
         this.mailAppKey = notificationConfig.getAppkey();
         this.mailSenderSecretKey = secureManagerConfig.mailSenderSecretKey();
@@ -40,14 +41,14 @@ public class EmailSenderUtil {
     public void sendMail(EmailSendDto emailSendDto) {
         ResponseEntity<EmailSendSuccessfulDto> result =
             WebClient.create(mailBaseurl).post()
-                .uri("/email/v2.0/appKeys/{mailAppKey}/sender/mail", mailAppKey)
-                .headers(
-                    httpHeaders -> httpHeaders.put("X-Secret-Key", List.of(mailSenderSecretKey)))
-                .bodyValue(emailSendDto)
-                .retrieve()
-                .toEntity(EmailSendSuccessfulDto.class)
-                .blockOptional()
-                .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE));
+                     .uri("/email/v2.0/appKeys/{mailAppKey}/sender/mail", mailAppKey)
+                     .headers(
+                         httpHeaders -> httpHeaders.put("X-Secret-Key", List.of(mailSenderSecretKey)))
+                     .bodyValue(emailSendDto)
+                     .retrieve()
+                     .toEntity(EmailSendSuccessfulDto.class)
+                     .blockOptional()
+                     .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE));
 
         EmailSendSuccessfulDto.Header header = Objects.requireNonNull(result.getBody()).getHeader();
 

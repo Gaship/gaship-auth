@@ -1,7 +1,7 @@
 package shop.gaship.gashipauth.token.service;
 
 import shop.gaship.gashipauth.token.dto.JwtTokenDto;
-import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
 
 /**
  *
@@ -17,5 +17,5 @@ public interface TokenService {
      * @param userDetailsDto 로그인에 성공한 회원의 정보가 담긴 객체입니다.
      * @return jwt 토큰을 반환합니다.
      */
-    JwtTokenDto createToken(SignInSuccessUserDetailsDto userDetailsDto);
+    JwtTokenDto createToken(UserInfoForJwtRequestDto userDetailsDto);
 }

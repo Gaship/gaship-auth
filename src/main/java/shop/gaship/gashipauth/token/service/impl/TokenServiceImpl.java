@@ -3,9 +3,9 @@ package shop.gaship.gashipauth.token.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipauth.token.dto.JwtTokenDto;
+import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
 import shop.gaship.gashipauth.token.service.TokenService;
 import shop.gaship.gashipauth.token.util.JwtTokenUtil;
-import shop.gaship.gashipauth.token.dto.SignInSuccessUserDetailsDto;
 
 /**
  *
@@ -20,7 +20,7 @@ public class TokenServiceImpl implements TokenService {
     private final JwtTokenUtil tokenUtil;
 
     @Override
-    public JwtTokenDto createToken(SignInSuccessUserDetailsDto userDetailsDto) {
+    public JwtTokenDto createToken(UserInfoForJwtRequestDto userDetailsDto) {
         String accessToken = tokenUtil.createAccessToken(userDetailsDto);
         String refreshToken = tokenUtil.createRefreshToken(userDetailsDto);
 
