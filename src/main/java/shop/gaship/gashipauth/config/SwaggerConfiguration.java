@@ -11,33 +11,39 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * packageName    : shop.gaship.gashipauth.config <br/>
- * fileName       : SwaggerConfiguration <br/>
- * author         : 최겸준 <br/>
- * date           : 2022/07/07 <br/>
- * description    : 해당서버의 REST API문서화 시켜주는 스웨거 환경설정입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/07           최겸준               최초 생성                         <br/>
+ * Swagger 관련 설정에 대한 클래스.
+ *
+ * @author : 조재철
+ * @since 1.0
  */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfiguration {
+
+    /**
+     * Swagger 설정의 핵심으로 문서화 객체를 빈으로 등록하는 메서드.
+     *
+     * @return Api 문서화 객체 반환.
+     */
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo())
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.example.gashipsecurity"))
+            .apis(RequestHandlerSelectors.basePackage("shop.gaship.gashipauth"))
             .paths(PathSelectors.any())
             .build();
     }
 
+    /**
+     * Swagger API 문서에 대한 설명을 표기하는 메소드.
+     *
+     * @return 해당 Api 설명 정보 반환.
+     */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Spring Boot Open Api Test with Swagger11111111111")
-            .description("설명 부분111")
+            .description("설명 부분")
             .version("1.0.0")
             .build();
     }
