@@ -23,9 +23,7 @@ import shop.gaship.gashipauth.verify.service.VerifyService;
  */
 @Service
 public class VerifyServiceImpl implements VerifyService {
-
     private static final String TEMPLATE_ID = "signUpTemplate";
-
     private final String frontUrl;
     private final EmailSenderUtil emailSenderUtil;
     private final RedisTemplate<String, String> redisTemplate;

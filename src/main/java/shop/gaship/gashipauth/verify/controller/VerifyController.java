@@ -1,5 +1,6 @@
 package shop.gaship.gashipauth.verify.controller;
 
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import shop.gaship.gashipauth.util.dto.RequestSuccessDto;
 import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
 import shop.gaship.gashipauth.verify.dto.VerifiedCheckDto;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
@@ -43,19 +43,19 @@ public class VerifyController {
     /**
      * 회원가입을 위한 이메일 주소인증을 승인하기 위한 컨트롤러입니다.
      *
-     * @throws EmailVerificationImpossibleException 이메일 전송실패 예외
      * @param verifyCode 회원에게 전송되었던 인증코드입니다.
      * @return 요청에 성공했다는 응답을 알리기위한 dto객체입니다.
+     * @throws EmailVerificationImpossibleException 이메일 전송실패 예외
      */
     @PutMapping("/email/{verifyCode}")
-    public ResponseEntity<RequestSuccessDto> verifyEmail(@PathVariable String verifyCode) {
+    public ResponseEntity<Map<String, String>> verifyEmail(@PathVariable String verifyCode) {
         boolean isVerified = verifyService.approveVerificationEmail(verifyCode);
 
         if (!isVerified) {
             throw new EmailVerificationImpossibleException();
         }
 
-        return ResponseEntity.ok(new RequestSuccessDto());
+        return ResponseEntity.ok(Map.of("requestStatus", "success"));
     }
 
     /**

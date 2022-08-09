@@ -63,14 +63,14 @@ public class RedisConfig {
     /**
      * redis 연동을 위한 연결 설정을 한 Lettuce를 반환하는 빈등록 하는 메서드. (Redis Client로 Lettuce를 사용)
      *
-     * @param authenticationConfig
-     * @return
+     * @param secureManagerConfig findSecretDataFromSecureKeyManager를 통해서
+    *                            NHN Secure key manager의 질의 기능을 사용하기 위한 매계변수입니다.
+     * @return Redis의 연결 정보를 가진 객체를 반환합니다.
      */
     @Bean
-    public RedisConnectionFactory redisConnectionFactory(
-        AuthenticationConfig authenticationConfig) {
-        String secretHost = authenticationConfig.findSecretDataFromSecureKeyManager(host);
-        String secretPassword = authenticationConfig.findSecretDataFromSecureKeyManager(password);
+    public RedisConnectionFactory redisConnectionFactory(SecureManagerConfig secureManagerConfig) {
+        String secretHost = secureManagerConfig.findSecretDataFromSecureKeyManager(host);
+        String secretPassword = secureManagerConfig.findSecretDataFromSecureKeyManager(password);
 
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
         configuration.setHostName(secretHost);
@@ -84,8 +84,9 @@ public class RedisConfig {
     /**
      * RedisTemplate 관련 설정을 하여 빈 등록하는 메서드이다.
      *
-     * @return
+     * @return 사용자 정의로 설정된 RedisTemplate를 반환합니다.
      */
+    @SuppressWarnings("java:S1452") // Redis 키와 value의값으로 객체를 사용하기 위함.
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();

@@ -25,7 +25,7 @@ class ServerConfigTest {
     @Test
     void serverConfigTest() {
         assertThat(config.getFrontUrl()).isEqualTo("http://localhost:8080");
-        assertThat(config.getShoppingMallUrl()).isEqualTo("http://localhost:7071");
+        assertThat(config.getShoppingMallUrl()).isEqualTo("http://localhost:7072");
         assertThat(config.getPaymentsUrl()).isEqualTo("http://localhost:7073");
         assertThat(config.getSchedulerUrl()).isEqualTo("http://localhost:7074");
     }

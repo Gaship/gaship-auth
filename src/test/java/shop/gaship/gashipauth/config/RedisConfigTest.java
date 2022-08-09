@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -16,8 +17,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @since 1.0
  */
 @ExtendWith({SpringExtension.class})
-@EnableConfigurationProperties(value = {RedisConfig.class, SecureManagerConfig.class})
 @TestPropertySource("classpath:application.properties")
+@EnableConfigurationProperties(value = {SecureManagerConfig.class})
+@Import({RedisConfig.class})
 class RedisConfigTest {
     @Autowired
     RedisConfig config;

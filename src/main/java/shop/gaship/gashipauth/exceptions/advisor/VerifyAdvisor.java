@@ -9,7 +9,6 @@ import shop.gaship.gashipauth.verify.exception.EmailSendFailureException;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 
 /**
- *
  * 인증관련 오류발생시 handling을 해주는 에러 핸들 클래스입니다.
  *
  * @author : 김민수
@@ -24,11 +23,9 @@ public class VerifyAdvisor {
      * @param exception EmailSendFailureException 또는 EmailVerificationImpossibleException 객체입니다.
      * @return 요청을 보낸 클라이언트에게 던져줄 예외입니다.
      */
-    @ExceptionHandler({
-        EmailSendFailureException.class,
-        EmailVerificationImpossibleException.class,
-    })
-    public ResponseEntity<ErrorResponse> emailSendFailAdviser(RuntimeException exception){
+    @ExceptionHandler({EmailSendFailureException.class,
+        EmailVerificationImpossibleException.class})
+    public ResponseEntity<ErrorResponse> emailSendFailAdviser(RuntimeException exception) {
         return ResponseEntity.badRequest().body(new ErrorResponse(exception.getMessage()));
     }
 
@@ -38,11 +35,8 @@ public class VerifyAdvisor {
      * @param exception 알 수 없는 예외, 에러 객체입니다.
      * @return 요청을 보낸 클라이언트에게 던져줄 예외 결과 값입니다.
      */
-    @ExceptionHandler({
-        RuntimeException.class,
-        Exception.class
-    })
-    public ResponseEntity<ErrorResponse> anyExceptionAdvisor(Exception exception){
+    @ExceptionHandler({RuntimeException.class, Exception.class})
+    public ResponseEntity<ErrorResponse> anyExceptionAdvisor(Exception exception) {
         log.error("VerifyAdvisor error cause : {0}, {1}", exception.getCause());
         log.error("VerifyAdvisor error message : {}", exception.getMessage());
         return ResponseEntity.internalServerError().body(new ErrorResponse(exception.getMessage()));

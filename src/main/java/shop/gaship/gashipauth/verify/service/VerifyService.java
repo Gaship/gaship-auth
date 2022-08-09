@@ -18,7 +18,7 @@ public interface VerifyService {
     VerificationCodeDto sendSignUpVerifyEmail(String receiverEmail);
 
     /**
-     * 이메일 검증을 완료하는 메서드입니다
+     * 이메일 검증을 완료하는 메서드입니다.
      *
      * @param verifyCode 인증을 위해 전송했던 코드입니다.
      * @return 인증에 완료하면 true를 반환합니다.
