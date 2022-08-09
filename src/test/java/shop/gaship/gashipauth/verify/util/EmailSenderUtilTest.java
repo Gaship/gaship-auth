@@ -12,12 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import shop.gaship.gashipauth.config.AuthenticationConfig;
 import shop.gaship.gashipauth.config.NotificationConfig;
 import shop.gaship.gashipauth.config.SecureManagerConfig;
 import shop.gaship.gashipauth.util.EmailSenderUtil;
@@ -40,7 +37,6 @@ import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 @EnableConfigurationProperties(value = {SecureManagerConfig.class, NotificationConfig.class})
 @Import({EmailSenderUtil.class})
 class EmailSenderUtilTest {
-
     @Autowired
     EmailSenderUtil emailSenderUtil;
 

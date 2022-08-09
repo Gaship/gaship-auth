@@ -1,13 +1,14 @@
 package shop.gaship.gashipauth.token.util;
 
 import io.jsonwebtoken.Jwts;
-import java.security.Key;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import shop.gaship.gashipauth.config.SecureManagerConfig;
+import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
 
 /**
  * Jwt 토큰 생성에 관한 유틸 클래스.
@@ -23,7 +24,7 @@ public class JwtTokenUtil {
 
     public static final long ONE_MONTH_AT_MILLI_SEC = 2_629_700_000L;
 
-    private final Key createKey;
+    private final SecureManagerConfig secureManagerConfig;
 
     /**
      * AccessToken을 만드는 메서드.
@@ -49,7 +50,7 @@ public class JwtTokenUtil {
      * header, payload, signature를 만들어 jwt token을 만드는 메서드.
      *
      * @param userDetails 회원 정보 (회원번호, 권한).
-     * @param seconds 시간(초).
+     * @param seconds     시간(초).
      * @return access token을 반환.
      */
     private String getToken(UserInfoForJwtRequestDto userDetails, long seconds) {
@@ -58,22 +59,22 @@ public class JwtTokenUtil {
         Map<String, Object> payload = makeJwtPayload(userDetails, accessTokenExpireDate.getTime());
 
         return Jwts.builder()
-            .setHeader(header)
-            .setClaims(payload)
-            .signWith(createKey)
-            .setExpiration(accessTokenExpireDate)
-            .compact();
+                .setHeader(header)
+                .setClaims(payload)
+                .signWith(secureManagerConfig.tokenKey())
+                .setExpiration(accessTokenExpireDate)
+                .compact();
     }
 
     /**
      * jwt의 payload를 만드는 메서드.
      *
      * @param userDetails 회원 정보 (회원번호, 권한).
-     * @param expireTime 토큰 만료 시간.
+     * @param expireTime  토큰 만료 시간.
      * @return 토큰의 payload 반환.
      */
     private Map<String, Object> makeJwtPayload(UserInfoForJwtRequestDto userDetails,
-            long expireTime) {
+                                               long expireTime) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userDetails.getMemberNo());
         claims.put("role", userDetails.getAuthorities());
