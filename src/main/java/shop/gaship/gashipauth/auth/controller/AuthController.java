@@ -3,6 +3,7 @@ package shop.gaship.gashipauth.auth.controller;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.gaship.gashipauth.auth.service.AuthService;
 import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
+import shop.gaship.gashipauth.token.dto.response.JwtResponseDto;
 
 /**
  * Auth 관련 Controller 클래스.
@@ -29,14 +31,16 @@ public class AuthController {
      * /logout 요청을 받아서 로그아웃 관련 응답을 하는 메서드.
      *
      * @param memberNo member의 number.
-     * @param request HTTP 서블릿에 대한 요청 정보.
+     * @param request  HTTP 서블릿에 대한 요청 정보.
      * @return logout이 되었는지 응답 반환.
      */
     @PostMapping(value = "/logout")
-    public ResponseEntity<?> logout(@RequestBody Integer memberNo, HttpServletRequest request) {
+    public ResponseEntity<Void> logout(@RequestBody Integer memberNo, HttpServletRequest request) {
         String accessToken = request.getHeader("X-AUTH-ACCESS-TOKEN");
         String refreshToken = request.getHeader("X-AUTH-REFRESH-TOKEN");
-        return authService.logout(accessToken, refreshToken, memberNo);
+        authService.logout(accessToken, refreshToken, memberNo);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     /**
@@ -46,7 +50,7 @@ public class AuthController {
      * @return 토큰이 재발급 되었는지 응답 반환.
      */
     @PostMapping(value = "/issue-token")
-    public ResponseEntity<?> issueJwt(@RequestBody UserInfoForJwtRequestDto userInfoDto) {
-        return authService.issueJwt(userInfoDto);
+    public ResponseEntity<JwtResponseDto> issueJwt(@RequestBody UserInfoForJwtRequestDto userInfoDto) {
+        return ResponseEntity.ok(authService.issueJwt(userInfoDto));
     }
 }
