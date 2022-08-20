@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "notification.mail")
 public class NotificationConfig {
+
     private String url;
     private String appkey;
 

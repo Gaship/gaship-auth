@@ -24,6 +24,7 @@ import shop.gaship.gashipauth.verify.service.VerifyService;
 @RequestMapping("/securities/verify")
 @RequiredArgsConstructor
 public class VerifyController {
+
     private final VerifyService verifyService;
 
 

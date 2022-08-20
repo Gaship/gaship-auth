@@ -52,12 +52,14 @@ public class AuthController {
      * @return 토큰이 재발급 되었는지 응답 반환.
      */
     @PostMapping(value = "/issue-token")
-    public ResponseEntity<JwtResponseDto> issueJwt(@RequestBody @Validated UserInfoForJwtRequestDto userInfoDto) {
+    public ResponseEntity<JwtResponseDto> issueJwt(
+            @RequestBody @Validated UserInfoForJwtRequestDto userInfoDto) {
         return ResponseEntity.ok(authService.issueJwt(userInfoDto));
     }
 
     @PostMapping(value = "/reissue-token")
-    public ResponseEntity<JwtResponseDto> reissueJwt(@RequestBody @Validated ReissueJwtRequestDto jwtDto) {
+    public ResponseEntity<JwtResponseDto> reissueJwt(
+            @RequestBody @Validated ReissueJwtRequestDto jwtDto) {
         return ResponseEntity.ok(authService.reissueJwt(jwtDto));
     }
 }

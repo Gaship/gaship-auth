@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableConfigurationProperties(value = {NotificationConfig.class})
 @TestPropertySource("classpath:application.properties")
 class NotificationConfigTest {
+
     @Autowired
     NotificationConfig config;
 

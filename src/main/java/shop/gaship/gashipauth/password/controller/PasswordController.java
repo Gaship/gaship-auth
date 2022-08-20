@@ -20,6 +20,7 @@ import shop.gaship.gashipauth.password.service.PasswordService;
 @RequestMapping("/securities/password")
 @RequiredArgsConstructor
 public class PasswordController {
+
     private final PasswordService passwordService;
 
     @PostMapping("/reissue")

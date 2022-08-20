@@ -18,7 +18,7 @@ public interface AuthService {
      * @param accessToken  인증 정보 access token.
      * @param refreshToken 인증 정보 refresh token.
      * @param memberNo     회원 번호.
-     * @return 로그아웃에 대한 응답 정보.
+     * @return 로그아웃에 대한 응답 정보 입니다.
      */
     void logout(String accessToken, String refreshToken, Integer memberNo);
 

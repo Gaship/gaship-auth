@@ -17,6 +17,7 @@ import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleExcept
 @RestControllerAdvice
 @Slf4j
 public class VerifyAdvisor {
+
     /**
      * 이메일 전송실패, 검증에 대한 실패를 잡아 전달하는 에러핸들러입니다.
      *

@@ -7,6 +7,7 @@ package shop.gaship.gashipauth.verify.exception;
  * @since 1.0
  */
 public class EmailSendFailureException extends RuntimeException {
+
     public EmailSendFailureException(String message) {
         super("이메일 발송에 실패했습니다. 사유 : " + message);
     }

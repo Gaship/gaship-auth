@@ -21,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableConfigurationProperties(value = {SecureManagerConfig.class})
 @Import({RedisConfig.class})
 class RedisConfigTest {
+
     @Autowired
     RedisConfig config;
 

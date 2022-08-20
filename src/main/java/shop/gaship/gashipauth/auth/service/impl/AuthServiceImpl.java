@@ -27,7 +27,8 @@ public class AuthServiceImpl implements AuthService {
     private final RedisTemplate redisTemplate;
 
     /**
-     * logout 관련 비즈니스 로직을 처리하는 메서드. logout시 accessToken을 Redis에 blackList로 저장, 기존 Redis에 있는 RefreshToken 삭제.
+     * logout 관련 비즈니스 로직을 처리하는 메서드. logout 시 accessToken 을
+     * Redis 에 blackList 로 저장, 기존 Redis 에 있는 RefreshToken 삭제.
      *
      * @param accessToken  인증 정보 access token.
      * @param refreshToken 인증 정보 refresh token.
@@ -59,8 +60,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtResponseDto issueJwt(UserInfoForJwtRequestDto userInfoDto) {
 
-        Integer userNo = userInfoDto.getMemberNo();
-
         String refreshToken = jwtTokenUtil.createRefreshToken(userInfoDto);
         String accessToken = jwtTokenUtil.createAccessToken(userInfoDto);
 
@@ -69,14 +68,15 @@ public class AuthServiceImpl implements AuthService {
         jwtTokenDto.setRefreshToken(refreshToken);
         jwtTokenDto.setAccessToken(accessToken);
         jwtTokenDto.setRefreshTokenExpireDateTime(
-            jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
+                jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
                 ZoneId.systemDefault()).toLocalDateTime());
         jwtTokenDto.setAccessTokenExpireDateTime(
-            jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
+                jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDateTime());
 
         redisTemplate.opsForValue()
-                     .set("RT " + userNo, refreshToken, JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC,
+                    .set("RT " + userInfoDto.getMemberNo(),
+                         refreshToken, JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC,
                          TimeUnit.MILLISECONDS);
 
         return jwtTokenDto;
@@ -91,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtResponseDto reissueJwt(ReissueJwtRequestDto reissueJwtRequestDto) {
         if (!Objects.equals(reissueJwtRequestDto.getRefreshToken(),
-            redisTemplate.opsForValue().get("RT " + reissueJwtRequestDto.getMemberNo()))) {
+                redisTemplate.opsForValue().get("RT " + reissueJwtRequestDto.getMemberNo()))) {
             throw new NotFoundRefreshTokenException();
         }
 
@@ -108,14 +108,15 @@ public class AuthServiceImpl implements AuthService {
         jwtTokenDto.setRefreshToken(refreshToken);
         jwtTokenDto.setAccessToken(accessToken);
         jwtTokenDto.setRefreshTokenExpireDateTime(
-            jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
+                jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
                 ZoneId.systemDefault()).toLocalDateTime());
         jwtTokenDto.setAccessTokenExpireDateTime(
-            jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
+                jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDateTime());
 
         redisTemplate.opsForValue()
-                     .set("RT " + reissueJwtRequestDto.getMemberNo(), refreshToken, JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC,
+                     .set("RT " + reissueJwtRequestDto.getMemberNo(),
+                         refreshToken, JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC,
                          TimeUnit.MILLISECONDS);
 
         return jwtTokenDto;

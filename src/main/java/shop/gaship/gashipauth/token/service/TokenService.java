@@ -4,13 +4,13 @@ import shop.gaship.gashipauth.token.dto.JwtTokenDto;
 import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
 
 /**
- *
  * 토큰을 발급해주는 서비스가 반드시 구현해야할 인터페이스입니다.
  *
  * @author : 김민수
  * @since 1.0
  */
 public interface TokenService {
+
     /**
      * jwt토큰을 생성해줍니다.
      *

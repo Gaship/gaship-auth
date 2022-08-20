@@ -11,11 +11,13 @@ import lombok.Getter;
  */
 @Getter
 public class EmailSendSuccessfulDto {
+
     Header header;
     Body body;
 
     @Getter
     public static class Header {
+
         private Integer resultCode;
         private String resultMessage;
         private Boolean isSuccessful;
@@ -23,15 +25,18 @@ public class EmailSendSuccessfulDto {
 
     @Getter
     public static class Body {
+
         private Data data;
 
         @Getter
         public static class Data {
+
             private String requestId;
             private List<EmailSendResult> results;
 
             @Getter
             public static class EmailSendResult {
+
                 private String receiveMailAddr;
                 private String receiveName;
                 private String receiveType;

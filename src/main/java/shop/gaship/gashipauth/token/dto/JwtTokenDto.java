@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtTokenDto {
+
     private String accessToken;
     private String refreshToken;
 }

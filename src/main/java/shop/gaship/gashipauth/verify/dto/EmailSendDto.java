@@ -14,6 +14,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class EmailSendDto {
+
     private String templateId;
     private Map<String, String> templateParameter;
     private List<EmailReceiver> receiverList;

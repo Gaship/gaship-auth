@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReissuePasswordReceiveEmailDto {
+
     @Email
     private String email;
 }
