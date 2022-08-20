@@ -2,6 +2,7 @@ package shop.gaship.gashipauth.auth.dto.request;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class ReissueJwtRequestDto implements Serializable {
     @NotBlank(message = "refresh token 값이 필요합니다.")
     private String refreshToken;
 
-    @NotBlank(message = "userNo 값이 필요합니다.")
+    @Min(value = 0, message = "memberNo 값이 필요합니다.")
     private Integer memberNo;
 
     private List<String> authorities;
