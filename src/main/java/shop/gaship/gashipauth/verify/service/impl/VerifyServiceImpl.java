@@ -62,7 +62,7 @@ public class VerifyServiceImpl implements VerifyService {
     public boolean approveVerificationEmail(String verifyCode) {
         String result = redisTemplate.opsForSet().pop(verifyCode);
         redisTemplate.opsForSet().add(verifyCode, String.valueOf(false));
-        redisTemplate.expire(verifyCode, 1, TimeUnit.MINUTES);
+        redisTemplate.expire(verifyCode, 3, TimeUnit.MINUTES);
 
         return isCodePopped(result);
     }
