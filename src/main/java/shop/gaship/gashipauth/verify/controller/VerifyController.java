@@ -68,7 +68,7 @@ public class VerifyController {
      */
     @GetMapping("/email/{verifyCode}")
     public ResponseEntity<VerifiedCheckDto> alreadyVerifiedCheck(@PathVariable String verifyCode) {
-        boolean isVerified = verifyService.removeVerificationCode(verifyCode);
+        boolean isVerified = verifyService.checkVerificationCode(verifyCode);
 
         return ResponseEntity.ok(new VerifiedCheckDto(isVerified));
     }

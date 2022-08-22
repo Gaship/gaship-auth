@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipauth.config.ServerConfig;
@@ -22,18 +23,12 @@ import shop.gaship.gashipauth.verify.service.VerifyService;
  * @since 1.0
  */
 @Service
+@RequiredArgsConstructor
 public class VerifyServiceImpl implements VerifyService {
     private static final String TEMPLATE_ID = "signUpTemplate";
-    private final String frontUrl;
+    private final ServerConfig serverConfig;
     private final EmailSenderUtil emailSenderUtil;
     private final RedisTemplate<String, String> redisTemplate;
-
-    public VerifyServiceImpl(ServerConfig serverConfig, EmailSenderUtil emailSenderUtil,
-            RedisTemplate<String, String> redisTemplate) {
-        this.frontUrl = serverConfig.getFrontUrl();
-        this.emailSenderUtil = emailSenderUtil;
-        this.redisTemplate = redisTemplate;
-    }
 
     @Override
     public VerificationCodeDto sendSignUpVerifyEmail(String receiverEmail) {
@@ -43,7 +38,8 @@ public class VerifyServiceImpl implements VerifyService {
 
         // 해당 url은 프론트 서버를 의미한다.
         Map<String, String> templateParam =
-                Map.of("link", frontUrl + "/members/signUp/email-verify/" + verifyCode);
+                Map.of("link",
+                    serverConfig.getFrontUrl() + "/members/signUp/email-verify/" + verifyCode);
         String receiveType = "MRT0";
 
         EmailSendDto emailSendDto = EmailSendDto.builder()
@@ -76,9 +72,11 @@ public class VerifyServiceImpl implements VerifyService {
     }
 
     @Override
-    public boolean removeVerificationCode(String verifyCode) {
-        String result = redisTemplate.opsForSet().pop(verifyCode);
-
-        return !isCodePopped(result);
+    public boolean checkVerificationCode(String verifyCode) {
+        if (Objects.nonNull(verifyCode)) {
+            Long verifyCodeCount = redisTemplate.opsForSet().size(verifyCode);
+            return Objects.requireNonNull(verifyCodeCount) != 0;
+        }
+        return false;
     }
 }

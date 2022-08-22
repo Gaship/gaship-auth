@@ -31,5 +31,5 @@ public interface VerifyService {
      * @param verifyCode 인증을 위해 전송했던 코드입니다.
      * @return 인증에 완료하면 true를 반환합니다.
      */
-    boolean removeVerificationCode(String verifyCode);
+    boolean checkVerificationCode(String verifyCode);
 }
