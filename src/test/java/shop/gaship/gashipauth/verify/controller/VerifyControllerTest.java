@@ -121,7 +121,7 @@ class VerifyControllerTest {
     @DisplayName("이메일 검증 확인 성공 : 이미 인증이 되었거나, 인증이 되지않 않는경우")
     void alreadyVerifiedCheck() throws Exception {
         String verifyCode = "easd-123-12312-1sdad";
-        given(verifyService.removeVerificationCode(verifyCode))
+        given(verifyService.checkVerificationCode(verifyCode))
             .willReturn(true);
 
         mockMvc.perform(get("/securities/verify/email/{verifyCode}", verifyCode))
@@ -135,7 +135,7 @@ class VerifyControllerTest {
     @DisplayName("이메일 검증 확인 실패 : 이미 인증이 되었거나, 인증이 존재하지 않는경우")
     void alreadyVerifiedCheckExceptionTest() throws Exception {
         String verifyCode = "easd-123-12312-1sdad";
-        given(verifyService.removeVerificationCode(verifyCode))
+        given(verifyService.checkVerificationCode(verifyCode))
             .willThrow(new EmailVerificationImpossibleException());
 
         mockMvc.perform(get("/securities/verify/email/{verifyCode}", verifyCode))

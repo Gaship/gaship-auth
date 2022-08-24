@@ -93,17 +93,30 @@ class VerifyServiceTest {
     }
 
     @Test
-    void removeVerificationCode() {
+    void checkVerificationCode() {
         //given
         SetOperations<String, String> setOperations = mock(SetOperations.class);
         given(redisTemplate.opsForSet()).willReturn(setOperations);
-        given(setOperations.pop(anyString())).willReturn("false");
-        // 인증이 완료되면 false가 레디스에 들어가게됨
+        given(setOperations.size(anyString())).willReturn(1L);
 
         //when
         boolean result =
-            verifyService.removeVerificationCode("123bd87b-c6bf-4e45-95c5-650ca76de779");
+            verifyService.checkVerificationCode("123bd87b-c6bf-4e45-95c5-650ca76de779");
 
         assertThat(result).isTrue();
+    }
+
+    @Test
+    void checkVerificationCodeKeySizeZeroCase() {
+        //given
+        SetOperations<String, String> setOperations = mock(SetOperations.class);
+        given(redisTemplate.opsForSet()).willReturn(setOperations);
+        given(setOperations.size(anyString())).willReturn(0L);
+
+        //when
+        boolean result =
+            verifyService.checkVerificationCode("123bd87b-c6bf-4e45-95c5-650ca76de779");
+
+        assertThat(result).isFalse();
     }
 }
