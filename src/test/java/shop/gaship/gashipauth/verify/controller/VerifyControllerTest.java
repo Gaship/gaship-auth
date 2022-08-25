@@ -73,7 +73,7 @@ class VerifyControllerTest {
     void verifyEmailTest() throws Exception {
         String verifyCode = "easd-123-12312-1sdad";
         given(verifyService.approveVerificationEmail(verifyCode))
-            .willReturn(true);
+            .willReturn(false);
 
         mockMvc.perform(put("/securities/verify/email/{verifyCode}", verifyCode))
                .andExpect(status().isOk())
@@ -86,7 +86,7 @@ class VerifyControllerTest {
     void verifyEmailFailTest() throws Exception {
         String verifyCode = "easd-123-12312-1sdad";
         given(verifyService.approveVerificationEmail(verifyCode))
-            .willReturn(false);
+            .willReturn(true);
 
         mockMvc.perform(put("/securities/verify/email/{verifyCode}", verifyCode))
                .andExpect(status().is4xxClientError())

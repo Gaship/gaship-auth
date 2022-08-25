@@ -71,7 +71,7 @@ class VerifyServiceTest {
         boolean result =
             verifyService.approveVerificationEmail("123bd87b-c6bf-4e45-95c5-650ca76de779");
 
-        assertThat(result).isTrue();
+        assertThat(result).isFalse();
     }
 
     @Test
