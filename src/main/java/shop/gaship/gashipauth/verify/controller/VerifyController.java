@@ -51,7 +51,7 @@ public class VerifyController {
     public ResponseEntity<Map<String, String>> verifyEmail(@PathVariable String verifyCode) {
         boolean isVerified = verifyService.approveVerificationEmail(verifyCode);
 
-        if (!isVerified) {
+        if (isVerified) {
             throw new EmailVerificationImpossibleException();
         }
 

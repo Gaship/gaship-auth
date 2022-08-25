@@ -68,7 +68,7 @@ public class VerifyServiceImpl implements VerifyService {
             throw new EmailVerificationImpossibleException();
         }
 
-        return Boolean.parseBoolean(result);
+        return !Boolean.parseBoolean(result);
     }
 
     @Override
