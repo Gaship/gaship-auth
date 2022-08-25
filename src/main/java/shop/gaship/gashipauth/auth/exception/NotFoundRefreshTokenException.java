@@ -8,7 +8,9 @@ package shop.gaship.gashipauth.auth.exception;
  */
 public class NotFoundRefreshTokenException extends RuntimeException {
 
-    public NotFoundRefreshTokenException(String message) {
-        super(message);
+    public static final String MESSAGE = "해당 refresh token 이 존재하지 않습니다.";
+
+    public NotFoundRefreshTokenException() {
+        super(MESSAGE);
     }
 }

@@ -8,7 +8,6 @@ import shop.gaship.gashipauth.token.service.TokenService;
 import shop.gaship.gashipauth.token.util.JwtTokenUtil;
 
 /**
- *
  * 토큰을 발급해주는 서비스 구현 클래스입니다.
  *
  * @author : 김민수
@@ -17,6 +16,7 @@ import shop.gaship.gashipauth.token.util.JwtTokenUtil;
 @Service
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
+
     private final JwtTokenUtil tokenUtil;
 
     @Override

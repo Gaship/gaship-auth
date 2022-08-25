@@ -4,7 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- *
  * 서버의 일반적인 환경설정을 수행하는 클래스입니다.
  *
  * @author : 김민수
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "gaship-server")
 public class ServerConfig {
+
     private String frontUrl;
     private String shoppingMallUrl;
     private String paymentsUrl;

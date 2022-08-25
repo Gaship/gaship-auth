@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableConfigurationProperties(value = {SecureManagerConfig.class})
 @TestPropertySource("classpath:application.properties")
 class SecureManagerConfigTest {
+
     @Autowired
     SecureManagerConfig config;
 

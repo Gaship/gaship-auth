@@ -1,14 +1,13 @@
 package shop.gaship.gashipauth.token.util;
 
 import io.jsonwebtoken.Jwts;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import shop.gaship.gashipauth.config.SecureManagerConfig;
 import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Jwt 토큰 생성에 관한 유틸 클래스.
@@ -59,11 +58,11 @@ public class JwtTokenUtil {
         Map<String, Object> payload = makeJwtPayload(userDetails, accessTokenExpireDate.getTime());
 
         return Jwts.builder()
-                .setHeader(header)
-                .setClaims(payload)
-                .signWith(secureManagerConfig.tokenKey())
-                .setExpiration(accessTokenExpireDate)
-                .compact();
+                   .setHeader(header)
+                   .setClaims(payload)
+                   .signWith(secureManagerConfig.tokenKey())
+                   .setExpiration(accessTokenExpireDate)
+                   .compact();
     }
 
     /**
@@ -74,7 +73,7 @@ public class JwtTokenUtil {
      * @return 토큰의 payload 반환.
      */
     private Map<String, Object> makeJwtPayload(UserInfoForJwtRequestDto userDetails,
-                                               long expireTime) {
+            long expireTime) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userDetails.getMemberNo());
         claims.put("role", userDetails.getAuthorities());

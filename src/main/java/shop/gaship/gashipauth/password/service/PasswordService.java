@@ -20,6 +20,7 @@ import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 @Component
 @RequiredArgsConstructor
 public class PasswordService {
+
     private static final String TEMPLATE_ID = "reissuePasswordTemplate";
     private final EmailSenderUtil emailSenderUtil;
 
@@ -30,10 +31,10 @@ public class PasswordService {
         EmailReceiver receiver = new EmailReceiver(receiveEmail.getEmail(), null, "MRT0");
 
         EmailSendDto emailSendDto = EmailSendDto.builder()
-            .templateId(TEMPLATE_ID)
-            .templateParameter(Map.of("reissue", reissuePassword))
-            .receiverList(List.of(receiver))
-            .build();
+                                                .templateId(TEMPLATE_ID)
+                                                .templateParameter(Map.of("reissue", reissuePassword))
+                                                .receiverList(List.of(receiver))
+                                                .build();
 
         emailSenderUtil.sendMail(emailSendDto);
 

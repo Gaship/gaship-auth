@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import shop.gaship.gashipauth.auth.dto.request.ReissueJwtRequestDto;
 import shop.gaship.gashipauth.auth.service.AuthService;
 import shop.gaship.gashipauth.token.dto.request.UserInfoForJwtRequestDto;
 import shop.gaship.gashipauth.token.dto.response.JwtResponseDto;
@@ -50,7 +52,14 @@ public class AuthController {
      * @return 토큰이 재발급 되었는지 응답 반환.
      */
     @PostMapping(value = "/issue-token")
-    public ResponseEntity<JwtResponseDto> issueJwt(@RequestBody UserInfoForJwtRequestDto userInfoDto) {
+    public ResponseEntity<JwtResponseDto> issueJwt(
+            @RequestBody @Validated UserInfoForJwtRequestDto userInfoDto) {
         return ResponseEntity.ok(authService.issueJwt(userInfoDto));
+    }
+
+    @PostMapping(value = "/reissue-token")
+    public ResponseEntity<JwtResponseDto> reissueJwt(
+            @RequestBody @Validated ReissueJwtRequestDto jwtDto) {
+        return ResponseEntity.ok(authService.reissueJwt(jwtDto));
     }
 }

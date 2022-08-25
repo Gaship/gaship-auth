@@ -25,6 +25,7 @@ import shop.gaship.gashipauth.verify.service.VerifyService;
 @Service
 @RequiredArgsConstructor
 public class VerifyServiceImpl implements VerifyService {
+
     private static final String TEMPLATE_ID = "signUpTemplate";
     private final ServerConfig serverConfig;
     private final EmailSenderUtil emailSenderUtil;

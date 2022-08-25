@@ -63,8 +63,8 @@ public class RedisConfig {
     /**
      * redis 연동을 위한 연결 설정을 한 Lettuce를 반환하는 빈등록 하는 메서드. (Redis Client로 Lettuce를 사용)
      *
-     * @param secureManagerConfig findSecretDataFromSecureKeyManager를 통해서
-    *                            NHN Secure key manager의 질의 기능을 사용하기 위한 매계변수입니다.
+     * @param secureManagerConfig findSecretDataFromSecureKeyManager를 통해서 NHN Secure key manager의 질의 기능을 사용하기 위한
+     *                            매계변수입니다.
      * @return Redis의 연결 정보를 가진 객체를 반환합니다.
      */
     @Bean

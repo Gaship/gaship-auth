@@ -15,6 +15,7 @@ import org.springframework.lang.Nullable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailReceiver {
+
     private String receiveMailAddr;
     @Nullable
     private String receiveName;

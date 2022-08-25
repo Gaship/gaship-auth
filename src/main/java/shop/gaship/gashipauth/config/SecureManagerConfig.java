@@ -26,7 +26,6 @@ import shop.gaship.gashipauth.exceptions.NoResponseDataException;
 import shop.gaship.gashipauth.util.dto.SecureKeyResponse;
 
 /**
- *
  * 보안과 관련된 환경설정을 위한 클래스입니다.
  *
  * @author : 김민수
@@ -35,6 +34,7 @@ import shop.gaship.gashipauth.util.dto.SecureKeyResponse;
 @Configuration
 @ConfigurationProperties(prefix = "secure-key-manager")
 public class SecureManagerConfig {
+
     private String url;
     private String appKey;
     private String jwtSecureKey;
@@ -71,21 +71,21 @@ public class SecureManagerConfig {
             SSLConnectionSocketFactory sslConnectionSocketFactory =
                 new SSLConnectionSocketFactory(sslContextBuilder.build());
             CloseableHttpClient httpClient = HttpClients.custom()
-                .setSSLSocketFactory(sslConnectionSocketFactory)
-                .build();
+                                                        .setSSLSocketFactory(sslConnectionSocketFactory)
+                                                        .build();
             HttpComponentsClientHttpRequestFactory requestFactory =
                 new HttpComponentsClientHttpRequestFactory(httpClient);
 
             return Objects.requireNonNull(new RestTemplate(requestFactory)
-                    .getForEntity(url + "/keymanager/v1.0/appkey/{appkey}/secrets/{keyid}",
-                        SecureKeyResponse.class,
-                        appKey,
-                        keyId)
-                    .getBody())
-                .getBody()
-                .getSecret();
+                              .getForEntity(url + "/keymanager/v1.0/appkey/{appkey}/secrets/{keyid}",
+                                  SecureKeyResponse.class,
+                                  appKey,
+                                  keyId)
+                              .getBody())
+                          .getBody()
+                          .getSecret();
         } catch (CertificateException | NoSuchAlgorithmException | KeyStoreException
-                 | UnrecoverableKeyException | IOException | KeyManagementException e) {
+            | UnrecoverableKeyException | IOException | KeyManagementException e) {
             throw new NoResponseDataException(errorMessage);
         }
     }

@@ -1,6 +1,6 @@
 package shop.gaship.gashipauth.token.dto.request;
 
-import java.util.List;
+import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +15,6 @@ import lombok.Setter;
 public class UserInfoForJwtRequestDto {
 
     private Integer memberNo;
-    private List<String> authorities;
+    private String email;
+    private Collection<String> authorities;
 }

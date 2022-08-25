@@ -22,21 +22,16 @@ import shop.gaship.gashipauth.verify.dto.EmailReceiver;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 
 /**
- * packageName : shop.gaship.gashipauth.verify.util <br/>
- * fileName : EmailSenderUtilTest <br/>
- * author : 김민수 <br/>
- * date : 2022/07/12 <br/>
- * description : <br/>
- * =========================================================== <br/>
- * DATE AUTHOR NOTE <br/>
- * ----------------------------------------------------------- <br/>
- * 2022/07/12 김민수 최초 생성 <br/>
+ * packageName : shop.gaship.gashipauth.verify.util <br/> fileName : EmailSenderUtilTest <br/> author : 김민수 <br/> date :
+ * 2022/07/12 <br/> description : <br/> =========================================================== <br/> DATE AUTHOR
+ * NOTE <br/> ----------------------------------------------------------- <br/> 2022/07/12 김민수 최초 생성 <br/>
  */
 @ExtendWith(SpringExtension.class)
 @TestPropertySource("classpath:application.properties")
 @EnableConfigurationProperties(value = {SecureManagerConfig.class, NotificationConfig.class})
 @Import({EmailSenderUtil.class})
 class EmailSenderUtilTest {
+
     @Autowired
     EmailSenderUtil emailSenderUtil;
 
@@ -46,10 +41,11 @@ class EmailSenderUtilTest {
         templateParam.put("link", "http://www.nhn.com");
 
         EmailSendDto emailSendDto = EmailSendDto.builder()
-                .templateId("signUpTemplate")
-                .templateParameter(templateParam)
-                .receiverList(List.of(new EmailReceiver("kms3335k@naver.com", "", "MRT0")))
-                .build();
+                                                .templateId("signUpTemplate")
+                                                .templateParameter(templateParam)
+                                                .receiverList(
+                                                    List.of(new EmailReceiver("kms3335k@naver.com", "", "MRT0")))
+                                                .build();
 
         System.out.println(new ObjectMapper().writeValueAsString(emailSendDto));
 

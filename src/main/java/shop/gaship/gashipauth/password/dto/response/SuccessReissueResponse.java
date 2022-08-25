@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class SuccessReissueResponse {
+
     private String email;
     private String reissuedPassword;
 }

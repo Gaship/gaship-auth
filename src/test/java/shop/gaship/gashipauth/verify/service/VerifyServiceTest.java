@@ -19,22 +19,17 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipauth.config.ServerConfig;
+import shop.gaship.gashipauth.util.EmailSenderUtil;
 import shop.gaship.gashipauth.verify.dto.EmailSendDto;
 import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
 import shop.gaship.gashipauth.verify.exception.EmailVerificationImpossibleException;
 import shop.gaship.gashipauth.verify.service.impl.VerifyServiceImpl;
-import shop.gaship.gashipauth.util.EmailSenderUtil;
 
 /**
- * packageName    : shop.gaship.gashipauth.verify.service <br/>
- * fileName       : VerifyServiceTest <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/13 <br/>
- * description    : <br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/13           김민수               최초 생성                         <br/>
+ * packageName    : shop.gaship.gashipauth.verify.service <br/> fileName       : VerifyServiceTest <br/> author
+ * : 김민수 <br/> date           : 2022/07/13 <br/> description    : <br/> ===========================================================
+ *  <br/> DATE              AUTHOR             NOTE                    <br/> -----------------------------------------------------------
+ * <br/> 2022/07/13           김민수               최초 생성                         <br/>
  */
 @ExtendWith({SpringExtension.class})
 @Import({VerifyServiceImpl.class, ServerConfig.class})
@@ -56,7 +51,7 @@ class VerifyServiceTest {
         doReturn(setOperations).when(redisTemplate).opsForSet();
         when(setOperations.add(anyString(), anyString())).thenReturn(1L);
         doNothing().when(emailSenderUtil)
-            .sendMail(any(EmailSendDto.class));
+                   .sendMail(any(EmailSendDto.class));
 
         // when
         VerificationCodeDto result = verifyService.sendSignUpVerifyEmail("abc");

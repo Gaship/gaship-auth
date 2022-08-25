@@ -9,6 +9,7 @@ import shop.gaship.gashipauth.verify.dto.VerificationCodeDto;
  * @since 1.0
  */
 public interface VerifyService {
+
     /**
      * 회원가입을 위해서 이메일인증을하는 메서드입니다.
      *
