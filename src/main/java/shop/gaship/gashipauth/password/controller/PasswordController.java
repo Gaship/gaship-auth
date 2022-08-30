@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.gaship.gashipauth.password.dto.request.ReissuePasswordReceiveEmailDto;
@@ -25,7 +26,7 @@ public class PasswordController {
 
     @PostMapping("/reissue")
     public ResponseEntity<SuccessReissueResponse> passwordReissueRequest(
-        @Valid ReissuePasswordReceiveEmailDto passwordReceiveEmailDto) {
+        @RequestBody @Valid ReissuePasswordReceiveEmailDto passwordReceiveEmailDto) {
         return ResponseEntity.ok(
             passwordService.sendReissuePasswordByEmail(passwordReceiveEmailDto));
     }

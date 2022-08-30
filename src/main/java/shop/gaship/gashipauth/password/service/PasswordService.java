@@ -28,13 +28,13 @@ public class PasswordService {
         ReissuePasswordReceiveEmailDto receiveEmail) {
         String reissuePassword = RandomStringUtils.random(5, 33, 64, false, false)
             + RandomStringUtils.randomAlphanumeric(15);
-        EmailReceiver receiver = new EmailReceiver(receiveEmail.getEmail(), null, "MRT0");
+        EmailReceiver receiver = new EmailReceiver(receiveEmail.getEmail(), "", "MRT0");
 
         EmailSendDto emailSendDto = EmailSendDto.builder()
-                                                .templateId(TEMPLATE_ID)
-                                                .templateParameter(Map.of("reissue", reissuePassword))
-                                                .receiverList(List.of(receiver))
-                                                .build();
+                                        .templateId(TEMPLATE_ID)
+                                        .templateParameter(Map.of("reissue", reissuePassword))
+                                        .receiverList(List.of(receiver))
+                                        .build();
 
         emailSenderUtil.sendMail(emailSendDto);
 
