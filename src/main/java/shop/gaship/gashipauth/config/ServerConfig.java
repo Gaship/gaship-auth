@@ -12,11 +12,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "gaship-server")
 public class ServerConfig {
-
+    private String clientEndpoint;
     private String frontUrl;
     private String shoppingMallUrl;
     private String paymentsUrl;
     private String schedulerUrl;
+
+    public String getClientEndpoint() {
+        return clientEndpoint;
+    }
 
     public String getFrontUrl() {
         return frontUrl;
@@ -48,5 +52,9 @@ public class ServerConfig {
 
     public void setSchedulerUrl(String schedulerUrl) {
         this.schedulerUrl = schedulerUrl;
+    }
+
+    public void setClientEndpoint(String clientEndpoint) {
+        this.clientEndpoint = clientEndpoint;
     }
 }
