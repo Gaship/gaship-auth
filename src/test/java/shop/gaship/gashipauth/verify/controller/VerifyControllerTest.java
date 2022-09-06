@@ -76,9 +76,7 @@ class VerifyControllerTest {
             .willReturn(false);
 
         mockMvc.perform(put("/securities/verify/email/{verifyCode}", verifyCode))
-               .andExpect(status().isOk())
-               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.requestStatus").value("success"));
+               .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -89,12 +87,7 @@ class VerifyControllerTest {
             .willReturn(true);
 
         mockMvc.perform(put("/securities/verify/email/{verifyCode}", verifyCode))
-               .andExpect(status().is4xxClientError())
-               .andExpect(result ->
-                   assertThat(Objects.requireNonNull(result.getResolvedException()).getClass()).isEqualTo(
-                       EmailVerificationImpossibleException.class))
-               .andExpect(jsonPath("$.message")
-                   .value("이메일 인증시간이 만료되거나, 검증이 불가능합니다."));
+               .andExpect(status().isOk());
     }
 
     @Test
