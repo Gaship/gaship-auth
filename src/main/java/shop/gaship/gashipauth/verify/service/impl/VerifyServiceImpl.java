@@ -40,7 +40,7 @@ public class VerifyServiceImpl implements VerifyService {
         // 해당 url은 프론트 서버를 의미한다.
         Map<String, String> templateParam =
                 Map.of("link",
-                    serverConfig.getFrontUrl() + "/members/signUp/email-verify/" + verifyCode);
+                    serverConfig.getClientEndpoint() + "/members/signUp/email-verify/" + verifyCode);
         String receiveType = "MRT0";
 
         EmailSendDto emailSendDto = EmailSendDto.builder()
