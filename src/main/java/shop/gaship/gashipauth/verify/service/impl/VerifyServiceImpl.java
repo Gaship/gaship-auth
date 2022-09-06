@@ -61,7 +61,7 @@ public class VerifyServiceImpl implements VerifyService {
         redisTemplate.opsForSet().add(verifyCode, String.valueOf(false));
         redisTemplate.expire(verifyCode, 3, TimeUnit.MINUTES);
 
-        return isCodePopped(result);
+        return true;
     }
 
     private boolean isCodePopped(String result) {
