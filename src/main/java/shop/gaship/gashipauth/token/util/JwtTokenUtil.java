@@ -74,9 +74,13 @@ public class JwtTokenUtil {
      */
     private Map<String, Object> makeJwtPayload(UserInfoForJwtRequestDto userDetails,
             long expireTime) {
+        String authority = userDetails.getAuthorities().stream()
+                                      .findFirst()
+                                      .orElse("ROLE_ANONYMOUS");
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userDetails.getMemberNo());
-        claims.put("role", userDetails.getAuthorities());
+        claims.put("role", authority);
         claims.put("createAt", new Date().getTime());
         claims.put("expireAt", expireTime);
 
