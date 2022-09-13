@@ -64,7 +64,7 @@ class AuthServiceImplTest {
         // then
         verify(redisTemplate).delete("RT " + memberNo);
         verify(redisTemplate.opsForValue())
-            .set(accessToken, "logout", JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC,
+            .set(accessToken, "logout", JwtTokenUtil.ONE_DAY_AT_MILLI_SEC,
                 TimeUnit.MILLISECONDS);
     }
 
@@ -101,7 +101,7 @@ class AuthServiceImplTest {
         when(jwtTokenUtil.createAccessToken(userInfoForJwtRequestDto)).thenReturn(accessToken);
         when(jwtTokenUtil.createRefreshToken(userInfoForJwtRequestDto)).thenReturn(refreshToken);
         when(jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC)).thenReturn(refreshTokenExpireDate);
-        when(jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC)).thenReturn(accessTokenExpireDate);
+        when(jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_DAY_AT_MILLI_SEC)).thenReturn(accessTokenExpireDate);
 
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
 
@@ -112,7 +112,7 @@ class AuthServiceImplTest {
         assertThat(issuedJwtResponseDto.getAccessToken()).isEqualTo(accessToken);
         assertThat(issuedJwtResponseDto.getRefreshToken()).isEqualTo(refreshToken);
         assertThat(issuedJwtResponseDto.getAccessTokenExpireDateTime()).isEqualTo(
-            jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
+            jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_DAY_AT_MILLI_SEC).toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDateTime());
         assertThat(issuedJwtResponseDto.getRefreshTokenExpireDateTime()).isEqualTo(
             jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
@@ -149,7 +149,7 @@ class AuthServiceImplTest {
         when(jwtTokenUtil.createRefreshToken(any())).thenReturn(newRefreshToken);
         when(jwtTokenUtil.createAccessToken(any())).thenReturn(newAccessToken);
         when(jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC)).thenReturn(refreshTokenExpireDate);
-        when(jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC)).thenReturn(accessTokenExpireDate);
+        when(jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_DAY_AT_MILLI_SEC)).thenReturn(accessTokenExpireDate);
 
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
         when(redisTemplate.opsForValue().get("RT " + reissueJwtRequestDto.getMemberNo())).thenReturn(refreshToken);
@@ -189,7 +189,7 @@ class AuthServiceImplTest {
         when(jwtTokenUtil.createRefreshToken(userInfoForJwtRequestDto)).thenReturn(newRefreshToken);
         when(jwtTokenUtil.createAccessToken(userInfoForJwtRequestDto)).thenReturn(newAccessToken);
         when(jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC)).thenReturn(refreshTokenExpireDate);
-        when(jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC)).thenReturn(accessTokenExpireDate);
+        when(jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_DAY_AT_MILLI_SEC)).thenReturn(accessTokenExpireDate);
 
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
 
