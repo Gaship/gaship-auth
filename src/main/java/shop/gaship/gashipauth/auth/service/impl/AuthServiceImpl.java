@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         redisTemplate.opsForValue()
-                     .set(accessToken, "logout", JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC,
+                     .set(accessToken, "logout", JwtTokenUtil.ONE_DAY_AT_MILLI_SEC,
                          TimeUnit.MILLISECONDS);
     }
 
@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
                 jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
                 ZoneId.systemDefault()).toLocalDateTime());
         jwtTokenDto.setAccessTokenExpireDateTime(
-                jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
+                jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_DAY_AT_MILLI_SEC).toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDateTime());
 
         redisTemplate.opsForValue()
@@ -111,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
                 jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_MONTH_AT_MILLI_SEC).toInstant().atZone(
                 ZoneId.systemDefault()).toLocalDateTime());
         jwtTokenDto.setAccessTokenExpireDateTime(
-                jwtTokenUtil.getExpireDate(JwtTokenUtil.THIRTY_MINUTE_AT_MILLI_SEC).toInstant()
+                jwtTokenUtil.getExpireDate(JwtTokenUtil.ONE_DAY_AT_MILLI_SEC).toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDateTime());
 
         redisTemplate.opsForValue()

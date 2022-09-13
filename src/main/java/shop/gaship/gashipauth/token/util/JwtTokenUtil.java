@@ -21,6 +21,8 @@ public class JwtTokenUtil {
 
     public static final long THIRTY_MINUTE_AT_MILLI_SEC = 1_800_000L;
 
+    public static final long ONE_DAY_AT_MILLI_SEC = 86_400_000L;
+
     public static final long ONE_MONTH_AT_MILLI_SEC = 2_629_700_000L;
 
     private final SecureManagerConfig secureManagerConfig;
@@ -32,7 +34,7 @@ public class JwtTokenUtil {
      * @return 생성한 access token 을 반환.
      */
     public String createAccessToken(UserInfoForJwtRequestDto userDetails) {
-        return getToken(userDetails, THIRTY_MINUTE_AT_MILLI_SEC);
+        return getToken(userDetails, ONE_DAY_AT_MILLI_SEC);
     }
 
     /**
